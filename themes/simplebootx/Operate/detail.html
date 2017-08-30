@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is page-header (.page-header &gt; h1)">
+    <link rel="shortcut icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico">
+    <script>
+        //全局变量
+        var GV = {
+            HOST: "{$_SERVER['HTTP_HOST']}",
+            ROOT: "__ROOT__/",
+            WEB_ROOT: "__WEB_ROOT__/",
+            JS_ROOT: "public/js/",
+            PUBLIC: "__PUBLIC__"
+        };
+    </script>
+    <script src="__PUBLIC__/js/wind.js"></script>
+    <!--异步加载css-->
+    <script>
+        Wind.css("__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css");
+        Wind.css("__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome.min.css?page=index");
+        Wind.css("__PUBLIC__/simpleboot/layui/css/layui.css");
+        Wind.css("__PUBLIC__/simpleboot/layui/css/global.css");
+        Wind.css("__PUBLIC__/js/artDialog/skins/default.css");
+        Wind.css("__PUBLIC__/bootstrap-table-master/dist/bootstrap-table.min.css");
+        /*Wind.css("__PUBLIC__/css/themes_blue.css");*/
+
+        function setBodyHeight() {
+            var iTop = $('#divTitle').offset().top + $('#divTitle').height() + 1;
+            $('#divBody').css('top', iTop + 'px');
+            $('#divBody').height($('#divMenu').height() - $('#divTitle').height() - 60);
+
+            if ($('#' + GV.DETAIL_ID).length > 0) {
+                $('#' + GV.DETAIL_ID).parent().height($('#divBody').height());
+                $('#' + GV.DETAIL_ID).height($('#divBody').height());
+                //if ($('#divInput').length > 0) {
+                //    $('#divInput').height($('#' + GV.DETAIL_ID).height() - 40);
+                //}
+            }
+        }
+    </script>
+    <script src="__PUBLIC__/js/jquery.js"></script>
+    <!--[if IE 7]>
+    <link href="__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <![endif]-->
+    <!--[if lte IE 8]>
+    <link href="__PUBLIC__/simpleboot/css/simplebootadminindex-ie.css?" rel="stylesheet"/>
+    <![endif]-->
+    <style>
+        .menu-sub-icon { width: 18px; height: auto; font-size: 12px; font-weight: normal; line-height: 12px; text-align: center; }
+        .brand { font-family: "Microsoft YaHei", "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti; padding: 0 37px 0 49px; margin: 0; height: 60px; display: inline-block; font-size: 13px; line-height: 60px; background-image: url('__PUBLIC__/images/logo.png'); background-repeat: no-repeat; background-size: 29px; background-position: 14px; color: #fff; }
+        .footer { height: 50px; bottom: 0; color: #a5a5a5; border-top: 1px solid #d2d2d2; text-align: center; font-size: 13px; line-height: 50px; padding: 0; background-color: initial !important; }
+        h2 { color: white; }
+        dd { line-height: 38px; }
+        a:link { text-decoration: none; }
+        a:visited { text-decoration: none; }
+        a:hover { text-decoration: none; }
+        a:active { text-decoration: none; }
+        .btn:focus { background-position: 0 30px !important; }
+        body { overflow: hidden; }
+        .rowselected { background-color: #ccc; }
+        /*.layui-btn-normal { background-color: #2196f3; }*/
+        .layui-form-selected dl { z-index: 9999; }
+        .fly-searchbox { position: relative; margin-right: 20px; display: inline-block; vertical-align: top; float: right; width: 396px; height: 48px; }
+            .fly-searchbox .icon-sousuo { position: absolute; right: 10px; top: 11px; color: #999; cursor: pointer; font-size: 17px; z-index: 2; }
+            .fly-searchbox input { padding-right: 60px; height: 38px; width: 300px; position: absolute; right: 0; }
+        .fly-select { height: 38px; width: 95px; font-size: 14px; }
+        input[type="text"], input[type="password"] { height: 38px; line-height: 38px; }
+        input[type=radio] { display: none; }
+        #divInput .layui-input, #divInput .layui-form-select { width: 400px; height: 38px !important; line-height: 38px !important; margin-bottom: 0px !important; }
+        #divInput .layui-input-inline { width: 400px !important; }
+        #divInput .layui-form-label { cursor: default !important; width: 100px; }
+        #divInput .layui-form-label-view { text-align: left; width: auto; }
+        #divDetailBtn .layui-btn + .layui-btn { margin-left: 0px; }
+    </style>
+    <block name="header"></block>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <include file="./Operate/Public/menu" />
+        <div class="layui-tab layui-tab-brief" lay-filter="demoTitle">
+            <form class="layui-form" method="post" enctype="multipart/form-data">
+                <div id="divTitle" class="layui-tab-title site-demo-title" style="top: 60px; height: auto; ">
+                    <span class="layui-breadcrumb" style="background-color: #ececec; padding: 0 20px 0; margin: 0; border: none; height: 45px; display: flex; align-items: center; ">
+                        {$page_nav}
+                    </span>
+                    <div id="divBtn">
+                        <block name="btn"></block>
+                    </div>
+                    <script>
+                        {
+                            if ($('#divBtn').children().length > 0) {
+                                $('#divBtn').css('padding', '10px');
+                            }
+                        }
+                    </script>
+                </div>
+                <div id="divBody" class="layui-body layui-tab-content site-demo site-demo-body">
+                    <div class="layui-tab-item layui-show">
+                        <div id="divInput" class="layui-main" style="margin: 0 15px;margin-top:10px;">
+                            <block name="body"></block>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <include file="./Operate/Public/footer" />
+    </div>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/simpleboot/layui/layui.js"></script>
+    <script src="__PUBLIC__/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="__PUBLIC__/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="__PUBLIC__/js/hcjs/jquery.detail.js"></script>
+    <script>
+        layui.use('element');
+        setBodyHeight();
+        setTimeout(function () {
+            setBodyHeight();
+        }, 1000);
+        $(window).resize(function () {
+            setBodyHeight();
+        });
+    </script>
+
+    <block name="script"></block>
+
+    <if condition="$admin['setting']">
+        <if condition="!empty($admin['setting']['agreement']) and $admin['setting']['agreement'] == 'no'">
+            <script>
+                var config = {
+                    skin: '',
+                    closeBtn: 0,
+                    btn: ['同意', '关闭'],
+                    yes: function () {
+                        if (confirm('是否同意?')) {
+                            $.post('{:U(\'Public/agreement_post\')}');
+                        }
+                        layer.closeAll();
+                    },
+                    cancel: function (index) {
+                        if (confirm('确定要关闭么?')) {
+                            layer.close(index);
+                            window.location.href = '{:U(\'Public/logout\')}';
+                        }
+                        return false;
+                    }
+                }
+                open_iframe_layer('{:U(\'Public/agreement\')}', '用户协议', config);
+            </script>
+        </if>
+    </if>
+</body>
+</html>

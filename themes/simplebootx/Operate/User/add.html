@@ -1,0 +1,191 @@
+<extend name="Operate/list_detail" />
+<block name="style">
+</block>
+<block name="btn">
+    <button class="layui-btn layui-btn-normal layui-btn-small" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+</block>
+<block name="nav">
+    {:L('ADMIN_USER_INDEX')}<b class="arrow fa fa-angle-right normal"></b>{:L('ADMIN_USER_ADD')}
+</block>
+<block name="detail">
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_NAME')}</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="user_name" required lay-verify="required" placeholder="请输入姓名" autocomplete="off">
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="color:red;">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_PHONE')}</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="mobile" required lay-verify="required|phone" placeholder="{:L('USERCOMPANY_PHONE_INPUT')}" autocomplete="off">
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="color:red;">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('PASSWORD')}</label>
+        <div class="layui-input-inline" >
+            <input type="password" name="user_pass" class="layui-input"  placeholder="******" group="edit">
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="color:red;">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERNICENAME')}</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="user_nicename" placeholder="请输入用户昵称" autocomplete="off">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_EMAIL')}</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="user_email" placeholder="{:L('USERCOMPANY_EMAIL_INPUT')}" autocomplete="off">
+        </div>
+    </div>
+    <if condition="$genre eq 1">
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:L('COMPANY')}</label>
+            <div class="layui-input-inline">
+                <select lay-filter="community" name="community_id" required lay-verify="required">
+                    <option>请选择</option>
+                    <foreach name="companys" item="item" key="key">
+                        <option value="{$item.id}">{$item.company_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux" style="color:red;">*</div>
+        </div>
+    </if>
+    <if condition="$genre eq 2">
+         <div class="layui-form-item">
+            <label class="layui-form-label">{:L('COMPANY')}</label>
+            <div class="layui-input-inline">
+                <select lay-filter="getCommunities" name="community_id" required lay-verify="required">
+                    <option>请选择</option>
+                    <foreach name="companys" item="item" key="key">
+                        <option value="{$item.id}">{$item.company_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux" style="color:red;">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:L('USERCOMPANY_COMMUNITY')}</label>
+            <div class="layui-input-inline">
+                <select lay-filter="communities" name="community_id" required lay-verify="required" id="communities">
+                    <option>请选择</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux" style="color:red;">*</div>
+        </div>
+    </if>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_ROLE')}</label>
+        <div class="layui-input-inline" id="roles">
+            <foreach name="roles" item="vo">
+                <div class="layui-input-inline">
+                    <input value="{$vo.id}" type="checkbox" name="role_id[]" lay-skin="primary" title="{$vo.name}">
+                </div>
+            </foreach>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script>
+        function getFormJson(form) {
+            var o = {};
+            var a = $(form).serializeArray();
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        }
+
+        layui.use('form', function () {
+            form = layui.form(); //获取form组件
+
+            //监听提交
+            form.on('submit(*)', function (data) {
+                var fromdata = getFormJson('.layui-form');
+                postData({
+                    url: "{:U('add_post',['genre'=>$genre])}",
+                    params: fromdata,
+                    success: function (result) {
+                        if (result.status == 1) {
+                            $('#tabList').bootstrapTable('refresh');
+
+                            layer.msg('添加成功', {
+                                time: 2000
+                            }, function () {
+                                showDetail(result.url)
+//                             closeDetail();
+                            });
+                        } else {
+                            layer.alert(result.info);
+                        }
+                    }
+                });
+                return false;
+            });
+
+            form.on('select(community)', function (data) {
+                var value = data.value;
+                $('#roles').html('<div class="layui-input-inline" style="height: 36px;line-height: 36px;">加载中...</div>');
+                $.getJSON('{:U(\'getroles\')}?company_id=' + value + '&genre={$genre}', function (result) {
+                    var info = result.rows;
+                    if (info.length > 0) {
+                        var html = '';
+                        $.each(info, function (i, v) {
+                            html += '<input value="' + v.id + '" type="checkbox" name="role_id[]" lay-skin="primary" title="' + v.name + '">';
+                        })
+                        $('#roles').html(html);
+                    } else {
+                        $('#roles').html('<div class="layui-input-inline" style="height: 36px;line-height: 36px;">暂无可选择角色！</div>');
+                    }
+                    form.render();
+                });
+            });
+
+            form.on('select(communities)', function (data) {
+                var value = data.value;
+                $('#roles').html('<div class="layui-input-inline" style="height: 36px;line-height: 36px;">加载中...</div>');
+                $.getJSON('{:U(\'getroles\')}?community_id=' + value + '&genre={$genre}', function (result) {
+                    let info = result.rows;
+                    if (info.length > 0) {
+                        var html = '';
+                        $.each(info, function (i, v) {
+                            html += '<input value="' + v.id + '" type="checkbox" name="role_id[]" lay-skin="primary" title="' + v.name + '">';
+                        })
+                        $('#roles').html(html);
+                    } else {
+                        $('#roles').html('<div class="layui-input-inline" style="height: 36px;line-height: 36px;">暂无可选择角色！</div>');
+                    }
+                    form.render();
+                });
+            })
+
+            form.on('select(getCommunities)', function (data) {
+                $.getJSON('{:U("getCommunities")}', {
+                    company_id: data.value
+                }, function (res) {
+                    $('#communities').empty();
+                    var objHtml = [];
+                    objHtml.push('<option value=""></option>');
+                    if (res.rows !== undefined && res.rows.length > 0) {
+                        $.each(res.rows, function () {
+                            objHtml.push('<option value="' + this.community_id + '">' + this.name + '</option>');
+                        });
+                    }
+                    $('#communities').html(objHtml.join(' '));
+                    form.render();
+                });
+            })
+        });
+    </script>
+</block>

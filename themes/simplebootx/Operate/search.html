@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is page-header (.page-header &gt; h1)">
+    <link rel="shortcut icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico">
+    <script>
+        //全局变量
+        var GV = {
+            HOST: "{$_SERVER['HTTP_HOST']}",
+            ROOT: "__ROOT__/",
+            WEB_ROOT: "__WEB_ROOT__/",
+            JS_ROOT: "public/js/",
+            PUBLIC: "__PUBLIC__"
+        };
+    </script>
+    <script src="__PUBLIC__/js/wind.js"></script>
+    <!--异步加载css-->
+    <script>
+        Wind.css("__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css");
+        Wind.css("__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome.min.css?page=index");
+        Wind.css("__PUBLIC__/simpleboot/layui/css/layui.css");
+        Wind.css("__PUBLIC__/simpleboot/layui/css/global.css");
+        Wind.css("__PUBLIC__/js/artDialog/skins/default.css");
+        Wind.css("__PUBLIC__/bootstrap-table-master/dist/bootstrap-table.min.css");
+    </script>
+    <!--<script src="__PUBLIC__/js/jquery.js"></script>-->
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--[if IE 7]>
+    <link href="__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <![endif]-->
+    <!--[if lte IE 8]>
+    <link href="__PUBLIC__/simpleboot/css/simplebootadminindex-ie.css?" rel="stylesheet"/>
+    <![endif]-->
+    <style>
+        .menu-main { color: #aeb9c2; text-shadow: none !important; background-color: #42485b; }
+        .menu-sub-icon { width: 18px; height: auto; font-size: 12px; font-weight: normal; line-height: 12px; text-align: center; }
+        .layui-nav-child > li > dd > a:hover { color: #fff !important; background-color: #5b6275 !important; }
+        .item-selected { background-color: #2196F3 !important; color: #fff !important; }
+        .brand { font-family: "Microsoft YaHei", "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti; padding: 0 37px 0 49px; margin: 0; height: 60px; display: inline-block; font-size: 13px; line-height: 60px; background-image: url('__PUBLIC__/images/logo.png'); background-repeat: no-repeat; background-size: 29px; background-position: 14px; color: #fff; }
+        .footer { height: 50px; bottom: 0; color: #a5a5a5; border-top: 1px solid #d2d2d2; text-align: center; font-size: 13px; line-height: 50px; padding: 0; background-color: initial !important; }
+        h2 { color: white; }
+        dd { line-height: 38px; }
+        a:link { text-decoration: none; }
+        a:visited { text-decoration: none; }
+        a:hover { text-decoration: none; }
+        a:active { text-decoration: none; }
+        .btn:focus { background-position: 0 30px !important; }
+        body { overflow: hidden; }
+        .rowselected { background-color: #ccc; }
+        .layui-btn-normal { background-color: #2196f3; }
+        .layui-form-selected dl { z-index: 9999; }
+        input[type="text"], input[type="password"] { height: 38px; line-height: 38px; }
+        input[type=radio] { display: none; }
+        /*顶部搜索框的样式*/
+        .search-form { font-size: 14px; display: inline-block; padding-top: 10px; padding-left: 10px; }
+            .search-form .layui-form-item { margin-bottom: 0px; }
+            .search-form .search-input { width: 300px; position: relative; }
+        #txtSearch { padding-right: 25px; }
+        .search-form .layui-icon { position: absolute; right: 10px; top: 13px; cursor: pointer; color: #999; }
+        /*************/
+
+        .table-bordered td { word-break: break-all; word-wrap: break-word; }
+
+        .table_btn { color: #2196f3; text-decoration: underline !important; }
+    </style>
+
+    <block name="header"></block>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div>
+            <div id="divTitle" class="layui-tab-title site-demo-title" style="top: 0px; height: auto; border-bottom: 1px solid #2196f3; z-index:999;">
+                <div id="divBtn">
+                    <block name="btn"></block>
+                </div>
+            </div>
+            <div id="divBody" class="layui-body layui-tab-content site-demo site-demo-body">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-main" style="margin: 0 15px;">
+                        <block name="body"></block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/simpleboot/layui/layui.js"></script>
+    <script src="__PUBLIC__/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="__PUBLIC__/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="__PUBLIC__/js/hcjs/jquery.table.js"></script>
+    <script src="__PUBLIC__/js/hcjs/jquery.detail.js"></script>
+
+    <script>
+        setTimeout(function () {
+            var iHeight = $(window.parent.document).find('.layui-layer-content').find('iframe').height();
+            iHeight = iHeight - $('#divTitle').height();
+            $('#divBody').height(iHeight);
+        }, 1000);
+    </script>
+
+    <block name="script"></block>
+</body>
+</html>

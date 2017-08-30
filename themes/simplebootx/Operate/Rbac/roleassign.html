@@ -1,0 +1,78 @@
+<extend name="Managment/list_detail" />
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/simpleboot/layui/css/modules/mplus/chosen/mplus.min.css">
+    <script src="__PUBLIC__/simpleboot/layui/chosen/chosen.js"></script>
+</block>
+<block name="btn">
+    <button class="layui-btn layui-btn-normal layui-btn-small" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+    <div class="layui-btn layui-btn-danger layui-btn-small" onclick="returnedit();">取消</div>
+    
+</block>
+<block name="nav">
+    {:L('ADMIN_RBAC_INDEX')}<b class="arrow fa fa-angle-right normal"></b>角色分配
+</block>
+<block name="detail">
+	<div class="layui-form-item">
+					<label class="layui-form-label">角色名称</label>
+					<div class="layui-input-inline" >
+						<label class="layui-form-label " style="text-align:left;">{$roleName}</label>                   
+                    </div>
+				</div>
+    <if condition="empty($user)">
+	    <div class="layui-form-item">
+		    <label class="layui-form-label"></label>
+	        <p>暂无可选择用户!</p>
+        </div>
+    </if>
+    <foreach name="user" item="item" key="key">
+        <div class="layui-form-item" style="margin-bottom: 0px;">
+            <div class="layui-input-block" style="height:30px;min-height:30px;">
+                <php>$checked = in_array($item['id'], $select_user_id, true) ? 'checked' : '';</php>
+                <php>$username = $item['user_name'] ? $item['user_name'] : $item['user_nicename'];</php>
+                <input type="checkbox" lay-skin="primary" name="user_id[{$key}]" value='{$item.id}' title="{$username}" {$checked}>
+            </div>
+        </div>
+    </foreach>
+    <input type="hidden" name="id" value="{:I('get.id')}">
+    <input type="hidden" name="genre" value="{$genre}">
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+    
+    	function returnedit(){
+    		showDetail("{:U('roleedit')}/id/{:I('get.id')}/genre/{$genre}");
+    	}
+
+        $('.test-select').chosen({
+            width: '100%',
+            no_results_text: "没有匹配结果"
+        });
+
+        layui.use('form', function () {
+            form = layui.form(); //获取form组件
+            //监听提交
+            form.on('submit(*)', function (data) {
+                postData({
+                    url : '{:U(\'roleassign_post\')}',
+                    params : data.field,
+                    success : function(result) {
+                        if (result.status == 1) {
+                            $('#rbac_tt').bootstrapTable('refresh');
+                            layer.msg(result.info, {
+                                time : 2000
+                            }, function() {
+//                                 closeDetail();
+                            	returnedit();
+                            });
+                        } else {
+                            layer.alert(result.info);
+                        }
+                    }
+                });
+                return false;
+            });
+        });
+//        $('.layui-input-inline').find('.layui-form-select').remove();
+    </script>
+</block>

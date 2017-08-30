@@ -1,0 +1,71 @@
+<extend name="Managment/list_detail" />
+<block name="style">
+
+</block>
+<block name="btn">
+    <button class="layui-btn layui-btn-normal layui-btn-small" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+     <div class="layui-btn layui-btn-danger layui-btn-small" onclick="returnedit();">取消</div>
+</block>
+<block name="nav">
+    {:L('ADMIN_RBAC_INDEX')}<b class="arrow fa fa-angle-right normal"></b>权限设置
+</block>
+<block name="detail">
+    <div class="table_full">
+    <div class="layui-form-item">
+					<label class="layui-form-label">角色名称</label>
+					<div class="layui-input-inline" >
+						<label class="layui-form-label" style="text-align:left;">{$roleName}</label>                   
+                    </div>
+				</div>
+        <table class="" id="table" style="width: 100%;">
+            <foreach name="modules" item="module" key="key">
+                <tr>
+                    <td style='padding-left:30px;'>
+                        <div class="layui-form-item" style="margin-bottom:0px;">
+                            <php>$checked = in_array($module['module_id'],$auth_access,true) ? 'checked' : '';</php>
+                            <!--<input type='checkbox' name='moduleid[]' value='{$module.module_id}' {$checked}> {$module.name}-->
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="moduleid[{$key}]" value='{$module.module_id}' title="{$module.name}" lay-skin="primary" {$checked}>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+    </div>
+    <input type="hidden" name="roleid" value="{$roleid}" />
+    <input type="hidden" name="genre" value="{$genre}"/>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+    	function returnedit(){
+    		showDetail("{:U('roleedit')}/id/{:I('get.id')}/genre/{$genre}");
+    	}
+    
+        layui.use('form', function () {
+            form = layui.form(); //获取form组件
+            //监听提交
+            form.on('submit(*)', function (data) {
+                postData({
+                    url : '{:U(\'authorize_module_post\')}',
+                    params : data.field,
+                    success : function(result) {
+                        if (result.status == 1) {
+                            $('#rbac_tt').bootstrapTable('refresh');
+                            layer.msg(result.info, {
+                                time : 2000
+                            }, function() {
+//                                 closeDetail();
+								returnedit();
+                            });
+                        } else {
+                            layer.alert(result.info);
+                        }
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+</block>

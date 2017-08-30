@@ -1,0 +1,222 @@
+<extend name="Operate/list_detail" />
+<block name="btn">
+    <div class="layui-input-inline" group="edit">
+        <button class="layui-btn layui-btn-normal layui-btn-small" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+        <div class="layui-btn layui-btn-danger layui-btn-small" onclick="back();">{:L("CANCEL")}</div>
+        <div class="layui-btn layui-btn-normal layui-btn-small" onclick="openchoose(this)">新增用户</div>
+    </div>
+</block>
+<block name="nav">
+    {:L('ADMIN_RBAC_INDEX')}<b class="arrow fa fa-angle-right normal"></b>{:L('ROLE_ALLOT')}
+</block>
+<block name="detail">
+    <!-- 角色名称 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('ROLE_NAME')}</label>
+        <div class="layui-input-inline">
+            <!--  <input type="text" name="name" value="{$data.name}" autocomplete="off" class="layui-input"  maxlength="20" readonly> -->
+            <label class="layui-form-label layui-form-label-view" >{$data.name}</label>
+        </div>
+    </div>
+
+    <!-- 角色描述 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('ROLE_DESCRIPTION')}</label>
+        <div class="layui-input-inline">
+            <!--  <textarea name="remark" rows="2" cols="20" class="layui-textarea" onkeydown="if (value.length > 250)
+                         value = value.substr(0, 250)" readonly>{$data.remark}</textarea> -->
+            <label class="layui-form-label layui-form-label-view">{$data.remark}</label>
+        </div>
+    </div>
+
+    <!-- 类型 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('CHOOSE_TYPE')}</label>
+        <div class="layui-input-inline">
+            <php>
+                if($data['type'] == 0){
+                $typeval =L('OPERATOR');
+                }elseif($data['type'] == 1){
+                $typeval =L('SYSTEM');
+                }elseif($data['type'] == 2){
+                $typeval =L('CUSTOM');
+                }elseif($data['type'] == 3){
+                $typeval =L('SUPER_ADMIN');
+                }elseif($data['type'] == 4){
+                $typeval =L('COMPANY_SUPER_ADMIN');
+                }elseif($data['type'] == 5){
+                $typeval =L('VILLAGE');
+                }
+            </php>
+            <!-- <input type="text" name="type" value="{$typeval}" autocomplete="off" class="layui-input"  maxlength="20" readonly> -->
+            <label class="layui-form-label layui-form-label-view">{$typeval}</label>
+        </div>
+    </div>
+
+    <if condition="$genre neq 0">
+        <div class="control-group" id="companyGroup">
+            <label class="control-label">{:L('COMPANY_GROUP')}</label>
+            <div class="controls">
+                <div class="layui-input-inline" style="width: 220px;">
+
+                    <select id="company_id" name="company_id" class="test-select" data-placeholder="请选择公司" disabled>
+                        <option value=""></option>
+                        <volist name="companys" id="vo">
+                            <php>$company_select=$vo['id']==$data['company_id']?"selected":"";</php>
+                            <option value="{$vo.id}" {$company_select}>{$vo.company_name}</option>
+                        </volist>
+                    </select>
+                </div>
+                <if condition="$genre eq 2">
+                    <div class="layui-input-inline" style="width: 220px;">
+                        <select id="xiaoquid" class="test-select" name="community_id" data-placeholder="请选择小区" disabled>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </if>
+            </div>
+        </div>
+    </if>
+
+
+    <!-- 选择用户 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USER')}</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="id" value="{$data.id}">
+            
+            <span style="display: none;">
+            <foreach name="user_data" item="item" key="key" >
+                <php>$checked = in_array($item['id'], $select_user_id, true) ? 'checked' : '';</php>
+                <php>$username = $item['user_name'] ? $item['user_name'] : $item['user_nicename'];</php>
+                <notempty name="username">
+                    <div  style="height:30px;min-height:30px;">
+                        <input type="checkbox" lay-skin="primary" name="user_id[{$key}]" value='{$item.id}' title="{$username}" {$checked}>
+                    </div>
+                </notempty>
+            </foreach>
+            </span>
+        </div>
+    </div>
+
+    <!-- 角色分配表格 -->
+    <div class="layui-form-item" style="margin: 10px 1rem;">
+        <div class="controls">
+            <table class="layui-table user-table" >
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col width="150">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>{:L('USERNAME')}</th>
+                        <th>{:L('NICENAME')}</th>
+                        <th>{:L('MOBILE')}</th>
+                        <th>{:L('ACTIONS')}</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                <foreach name="role_user" item="vo">
+                    <tr>
+                    <php>$username = $vo['user_name']?$vo['user_name']:$vo['user_nicename'];</php>
+                    <td>{$vo.user_name}</td>
+                    <td>{$vo.user_nicename}</td>
+                    <td>{$vo.mobile}<input type="hidden" data="{$vo.id}" value="{$vo.id}"></td>
+                    <td><a onclick='Delete("{:U("deleteRole",array("rid"=>$vo["role_id"],"uid"=>$vo["user_id"]))}")'>{:L(\'DELETE\')}</a></td>
+                    </tr>
+                </foreach>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/common.js?123"></script>
+    <block name="script">
+        <script>
+                        var layer;
+                        layui.use('form', function (data) {
+                            form = layui.form(); //获取form组件
+                            layer = layui.layer
+                            //监听提交
+                            form.on('submit(*)', function (data) {
+                                /*       layer.alert(JSON.stringify(data.field)); */
+                                postData({
+                                    url: "{:U('rbac/roledistribute_post')}",
+                                    params: data.field,
+                                    success: function (result) {
+                                        if (result.status == 1) {
+                                            $('#tabList').bootstrapTable('refresh');
+                                            showDetail(result.url);
+                                            layer.msg('保存成功', {
+                                                time: 2000
+                                            });
+                                        } else {
+                                            layer.alert(result.info);
+                                        }
+                                    }
+                                });
+                                return false;
+                            });
+                        });
+                        //选择按钮的触发事件
+                        function openchoose(obj) {
+                            _adddiv = 'selectnow';
+                            $('#' + _adddiv).removeAttr('id');
+                            $(obj).prev().prev().children('.layui-input').attr('id', _adddiv);
+                            _open = layer.open({
+                                type: 2,
+                                title: '选择用户',
+                                content: "{:U('userlist')}",
+                                area: ['700px', '550px'],
+                            });
+                        }
+                        function back() {
+                            showDetail("{:U('roleedit',array('id'=>$data['id']))}");
+                        }
+                        function Delete(url) {
+                            layui.use('layer', function () {
+                                layer.msg('确认要删除该记录吗？', {
+                                    icon: 3,
+                                    time: 20000, //20s后自动关闭
+                                    shade: [0.2, '#222'],
+                                    btn: ['确认', '取消'],
+                                    yes: function (index, layero) {
+                                        layer.close(index);
+                                        postData({
+                                            url: url,
+                                            success: function (result) {
+                                                switch (result.status) {
+                                                    case 1:
+                                                        showDetail("{:U('roledistribute',array('id'=>$data['id']))}");
+                                                        break;
+                                                    default:
+                                                        layer.msg(result.info, {
+                                                            icon: 5
+                                                        });
+                                                        break;
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                        
+                        function addSelectUser(user){
+                            var t = $('[data='+user.id+']').val();
+                            if(t){
+                                layer.msg('该用户已经选择');
+                            }else{
+                                var html = '<tr><td>'+user.user_name+'</td><td>'+user.user_nicename+'</td><td>'+user.mobile+'</td><td>';
+                                html += '<a onclick="remove(this)">{:L(\'DELETE\')}</a><input type="hidden" data="'+user.id+'" name="user_id['+user.id+']" value="'+user.id+'"></td></tr>';
+                                $(".user-table").append(html);
+                                layer.closeAll('iframe');
+                            }
+                        }
+                        
+                        function remove(obj){
+                            $(obj).parent().parent().remove();
+                        } 
+        </script>
+    </block>

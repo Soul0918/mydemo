@@ -1,0 +1,11 @@
+.layui-layout-admin .layui-header,.layui-bg-black,.layui-nav{background-color:#58b1fc}
+.layui-nav .layui-nav-item a{color:#fff;}
+.menu-main{background-color:#248dc1}
+.layui-nav-tree .layui-nav-title a, .layui-nav-tree .layui-nav-title a:hover,.layui-nav-itemed {background-color: #389bcf;}
+.layui-nav-itemed>a{background-color: #0e6390 !important;}
+.layui-nav-child > li > dd > a:hover {    background-color: #FF5722 !important;}
+.layui-nav-tree .layui-nav-item a:hover {background-color: #0e6390;}
+.item-selected { background-color: #FF5722 !important;}
+.layui-nav-tree .layui-nav-child a {color:#fff;}
+.table_btn{color:#248dc1;}
+.layui-btn-normal { background-color: #389bcf;}

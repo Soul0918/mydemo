@@ -1,0 +1,51 @@
+﻿<style>
+    .detailpage-nav { width: 100%; height: 30px; border-bottom: 1px solid #ddd; margin-bottom: 15px; text-indent: 10px; line-height: 30px; color: #ccc; }
+    .detailpage-nav b { display: inline-block; width: 20px; text-align: center; }
+    #divInput .layui-input, #divInput .layui-form-select { width: 400px; height: 38px !important; line-height: 38px !important; margin-bottom: 0px !important; }
+    #divInput .layui-input-inline { width: 400px !important; }
+    #divInput .layui-form-label { cursor: default !important; width:100px; }
+    #divInput .layui-form-label-view { text-align: left; width: auto; }
+    #divDetailBtn .layui-btn + .layui-btn { margin-left: 0px; }
+</style>
+<block name="style"></block>
+
+<form class="layui-form-tree" method="post" enctype="multipart/form-data">
+    <div style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+        <div id="divDetailBtn" style="background-color: #fafafa; padding: 5px; border-bottom: solid 1px #ccc; position: fixed; width: 100%; height: 29px; z-index: 99">
+            <block name="btn"></block>
+            <i class="layui-icon" onclick="closeDetail();" style="font-size: 25px; cursor: pointer; position: fixed; right: 15px; top: 7px;z-index:99;">&#x1006;</i>
+        </div>
+        <div id="divInput" style="width:100%; overflow-x:hidden; overflow-y:auto; min-width:500px; margin-top:40px;">
+            <div class="detailpage-nav">
+                <block name="nav"></block>
+            </div>
+            <block name="detail"></block>
+        </div>
+    </div>
+</form>
+
+<block name="body"></block>
+<script>
+    $('#divInput').height($('#detail_form').height() - 40);
+
+    function resultHandle(result, msg, id) {
+        switch (result.status) {
+            case 0:
+                $('#tabList').bootstrapTable('refresh');
+                layer.msg(msg, {
+                    time: 2000
+                });
+                showDetail("{:U('detail')}/id/" + id);
+                break;
+            case - 99:
+                noDetail();
+                break;
+            default:
+                layer.msg(result.content, {
+                    icon: 5
+                });
+                break;
+        }
+    }
+</script>
+<block name="script"></block>

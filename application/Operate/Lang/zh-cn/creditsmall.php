@@ -1,0 +1,27 @@
+<?php
+return [
+		'COMMODITY_CODE' => '商品编号',
+		'COMMODITY_STATE' => '商品状态',
+		'COMMODITY_TITLE' => '标题',
+		'COMMODITY_CONTENT' => '内容',
+		'COMMODITY_ALBUM' => '封面图片',
+		'COMMODITY_QUANTITY' => '商品数量',
+		'COMMODITY_NEED_CREDITS' => '所需积分',
+		'CREATE_TIME' => '创建时间',
+		'UPDATE_TIME' => '更新时间',
+		'STATE_DELETE' => '已删除',
+		'STATE_NORMAL' => '正常',
+		'STATE_OFFSHELF' => '已下架',
+		'STATE_UNKNOWN' => '未知状态',
+		'CREDITS_SHOPPING' => '积分商城',
+		'PLEASE_INPUT'    =>'请输入',
+		'DELETE_SUCCESS' =>'删除成功',
+		'OFFSHELF_SUCCESS' =>'下架成功',
+		'ONSHELF_SUCCESS' =>'上架成功',
+		'OFFSHELF' => '下架',
+		'ONSHELF' => '上架',
+		'SAVE'    =>'保存',
+		'DELETE'  =>'删除',
+		'CANCLE'  =>'取消',
+		'EDIT'    =>'编辑'
+];

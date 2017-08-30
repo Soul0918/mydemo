@@ -1,0 +1,27 @@
+<?php
+
+return array(
+    'EQUIPMENT' => '设备',
+    'EQUIPMENT_NAME' => '设备名',
+    'MAC_ADDRESS' => 'mac地址',
+    'REMARK' => '备注',
+    'STATE_DELETE' => '已删除',
+    'STATE_NORMAL' => '正常',
+    'STATE_REPAIR' => '维修中',
+    'STATE_SCRAP' => '报废',
+    'STATE_UNKNOWN' => '未知状态',
+    'AUTHORIZATION_OBJECT' => '授权对象',
+    'AUTHORIZATION_TYPE' => '授权类型',
+    'START_TIME' => '开始时间',
+    'EXPIRATION_TIME' => '过期时间',
+    'ADD_AUTHORIZATION' => '新增授权',
+    'ALL' => '所有人',
+    'COMPANY' => '公司',
+    'COMMUNITY' => '小区',
+    'UNIT' => '单元',
+    'ROOM' => '房间',
+    'USER' => '用户',
+    'OPENTIME' => '开门时间',
+    'JURISDICTION_MANAGE' => '权限设置',
+    'JURISDICTION_OPERATE' => '操作',
+);

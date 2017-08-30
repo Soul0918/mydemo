@@ -1,0 +1,138 @@
+<extend name="Managment/list_detail" />
+<block name="style">
+    <style>
+        .org .layui-form-select{display:none;}
+    </style>
+</block>
+<block name="btn">
+    <button class="layui-btn layui-btn-normal layui-btn-small" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+</block>
+<block name="nav">
+    {:L('ADMIN_RBAC_INDEX')}<b class="arrow fa fa-angle-right normal"></b>{:L('ADMIN_RBAC_ROLEADD')}
+</block>
+<block name="detail">
+    <input type="hidden" name="genre" value="{$genre}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('ROLE_NAME')}</label>    
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="name" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="color:red;">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('ROLE_DESCRIPTION')}</label>
+        <div class="layui-input-inline">
+            <textarea name="remark" rows="2" cols="20" id="remark" placeholder="" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('CHOOSE_TYPE')}</label>
+        <div class="layui-input-inline">
+            <select name="type" lay-filter="role" lay-verify="" id="type_select" >
+                <if condition="$genre eq 0">
+                    <option value="0" name="type" >{:L('OPERATOR')}</option>
+                </if>
+                <if condition="$genre eq 1">
+                    <option value="2" name="type" >{:L('CUSTOM')}</option>
+                    <option value="1" name="type" >{:L('SYSTEM')}</option>
+                </if>
+                <if condition="$genre eq 2">
+                    <option value="2" name="type">{:L('VILLAGE')}</option>
+                </if>	
+            </select>
+
+        </div>
+    </div>
+
+    <if condition="$genre gt 0">
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属公司</label>
+            <div class="layui-input-inline"  group="edit">
+                <select lay-filter="abc" name="company_id" class="test-select" data-placeholder="请选择公司" >
+                    <volist name="companys" id="vo">
+                        <option value="{$vo.id}">{$vo.company_name}</option>
+                    </volist>
+                </select>
+
+            </div>
+            <div class="layui-input-inline"  group="view">
+                <label class="layui-form-label layui-form-label-view" group="view">{$data.company_name}</label>
+            </div>
+        </div>
+        <if condition="$genre eq 2">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属小区</label>
+                <div class="layui-input-inline"  group="edit">
+
+                    <div class="layui-input-inline" >
+                        <select id="xiaoquid" class="test-select" name="community_id" data-placeholder="请选择小区">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-input-inline"  group="view">
+                    <label class="layui-form-label layui-form-label-view" group="view">{$data.community_name}</label>
+                </div>
+            </div>
+        </if>
+    </if>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('STATUS')}</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="status" value="1" title="{:L('ROLE_OPEN')}" checked>
+            <input type="radio" name="status" value="0" title="{:L('ROLE_CLOSE')}">
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script>
+        layui.use('form', function () {
+            form = layui.form(); //获取form组件
+
+            //监听提交
+            form.on('submit(*)', function (data) {
+                postData({
+                    url: "{:U('roleadd_post')}",
+                    params: data.field,
+                    success: function (result) {
+                        if (result.status == 1) {
+                            $('#tabList').bootstrapTable('refresh');
+
+                            layer.msg('添加成功', {
+                                time: 2000
+                            }, function () {
+                                showDetail(result.url);
+                                //closeDetail();
+                            });
+                        } else {
+                            layer.alert(result.info);
+                        }
+                    }
+                });
+                return false;
+            });
+            form.on("select(abc)", function (data) {
+                getXiaoqu(data.value);
+            });
+        });
+
+        function getXiaoqu(id) {
+            $.getJSON('{:U("Rbac/getCommunities")}', {
+                company_id: id
+            }, function (ci_objData) {
+                $('#xiaoquid').empty();
+                var objHtml = [];
+                objHtml.push('<option value=""></option>');
+                if (ci_objData.rows != undefined && ci_objData.rows.length > 0) {
+                    $.each(ci_objData.rows, function () {
+                        objHtml.push('<option value="' + this.community_id + '">' + this.name + '</option>');
+                    });
+                }
+                $(objHtml.join('')).appendTo('#xiaoquid');
+                form.render();
+            });
+        }
+    </script>
+</block>

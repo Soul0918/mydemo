@@ -1,0 +1,25 @@
+<?php
+return [
+		'X_COMPANY_INDEX' => '公司资料',
+		'X_COMPANY_INDEX_ADD' => '添加公司',
+		'X_COMPANY_INDEX_EDIT' => '编辑公司',
+		'X_COMPANY_INDEX_NAME' => '公司名称',
+		'X_COMPANY_INDEX_REMARK' => '关于我们',
+		'X_COMPANY_INDEX_ADMIN' => '管理员',
+		'X_COMPANY_INDEX_LOGO' => '公司Logo',
+		'X_COMPANY_INDEX_ROLE' => '角色',
+		'X_COMPANY_INDEX_THEME' => '模板',
+		'X_COMPANY_INDEX_DEFAULT' => '默认',
+		'X_COMPANY_INDEX_WX_PUBLIC' => '自定义公众号',
+		'X_COMPANY_INDEX_PAY_CONFIG' => '自定义支付配置',
+		'X_COMPANY_INDEX_WX_ORIGINAL' => '微信原始ID',
+		'X_COMPANY_INDEX_WX_MCH' => '商户平台商户号',
+		'X_COMPANY_INDEX_WX_APIKEY' => '商户平台API密钥',
+		'X_COMPANY_INDEX_WX_QRCODE' => '公众号二维码',
+		'X_COMPANY_OPEN' => '开启',
+		'X_COMPANY_CLOSE' => '关闭',
+		'X_COMPANY_UPDATE_INVITE_CODE' => '更新邀请码',
+		'X_COMPANY_CREATE_INVITE_CODE' => '生成邀请码',
+		'X_COMPANY_CHOOSE_PIC' => '选择图片',
+		'X_COMPANY_INVITE_CODE' => '邀请码'
+];

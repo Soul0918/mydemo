@@ -1,0 +1,142 @@
+<div id="divHeader" class="layui-header header header-demo" style="border-bottom: none;height:60px;">
+    <div class="layui-main">
+        <php>$login_type = session('LOGIN_TYPE');</php>
+        <ul class="layui-nav" lay-filter="" style="position: relative; right: initial;">
+            <li style="display: inline-block; vertical-align: middle;">
+                <a href="{:U('Operate/index/welcome')}" class="brand">
+                    <span class="title">
+                        企鹅圈运营管理平台
+                    </span>
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <!--<button onclick="clearCache()" style="background:white;color:black;padding:5px 10px;border-radius:5px; border:none;" >清理缓存</button>
+                <button onclick="updateMenu()" style="background:#e60;color:#fff;padding:5px 10px;border-radius:5px; border:none;" >更新菜单</button>
+                <button onclick="updateAuthCache()" style="background:#2e0;color:#fff;padding:5px 10px;border-radius:5px; border:none;">更新门禁设备</button>-->
+            <php>if ($login_type == '1' && count($companys) > 0) {</php>
+            <dl class="layui-nav-child">
+                <foreach name="companys" item="company_">
+                    <if condition="$company_id eq $company_['id']">
+                        <dd class="layui-this" style="padding-left:20px;">{$company_.company_name}</dd>
+                        <else />
+                        <dd><a href="{:U('Managment/public/change_company',['id'=>$company_['id']])}">{$company_.company_name}</a></dd>
+                    </if>
+                </foreach>
+            </dl>
+            <php>} elseif ($login_type == '2' && count($communities_) > 0){</php>
+            <dl class="layui-nav-child">
+                <foreach name="communities_" item="community_">
+                    <if condition="$community_id eq $community_['community_id']">
+                        <dd class="layui-this" style="padding-left:20px;">{$community_.name}</dd>
+                        <else />
+                        <dd><a href="{:U('Managment/public/change_community',['id'=>$community_['community_id']])}" class="{$name==$community_.name?'layui-this':'1'}">{$community_.name}</a></dd>
+                    </if>
+                </foreach>
+            </dl>
+            <php>}</php>
+            </li>
+            <li class="layui-nav-item" style="float:right;">
+                <a href="javascript:;">
+                    <if condition="$admin['avatar']">
+                        <img style="width: 32px; max-height:32px; margin-right: 5px;" class="nav-user-photo" src="{:sp_get_user_avatar_url($admin['avatar'])}" alt="{$admin.user_login}" />
+                        <else />
+                        <img style="width: 32px; margin-right: 5px;" src="__TMPL__Operate/Public/assets/images/face.png" alt="{$admin.user_login}" />
+                    </if>
+                    {:L('WELCOME_USER',array('username'=>empty($admin['user_name'])?$admin['user_nicename']:$admin['user_name']))}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="{:U(\'User/userinfo')}" style="color: black;">
+                            <i class="fa fa-user"></i>
+                            {:L('ADMIN_USER_USERINFO')}
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="{:U(\'Setting/password')}" style="color: black;">
+                            <i class="fa fa-lock"></i>
+                            {:L('ADMIN_SETTING_PASSWORD')}
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="{:U('Operate/public/logout')}" style="color: black;">
+                            <i class="fa fa-sign-out"></i>
+                            {:L('LOGOUT')}
+                        </a>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="divMenu" class="layui-side layui-bg-black" style="top:60px;">
+    <div class="layui-side-scroll">
+        <php>$page_nav='';</php>
+        <php>$page_name='';</php>
+        <ul class="layui-nav layui-nav-tree" lay-filter="menu">
+            <notempty name="menus">
+                <foreach name="menus" item="vo">
+                    <if condition="($vo.name !='个人信息') AND strpos($vo['id'],$Think.MODULE_NAME)">
+                    <php>
+                        $url=empty($cam_url)?strtoupper($Think.MODULE_NAME.'_'.$Think.CONTROLLER_NAME.'_'.$Think.ACTION_NAME):$cam_url;
+                        $select=false;
+                        if($vo['items']){
+                            foreach($vo['items'] as &$value){
+                                if($value['lang'] == $url){
+                                    $select=true;
+                                    $page_nav = '<a><cite>'.$vo['name'].'</cite></a>'.'<a><cite>'.$value['name'].'</cite></a>';
+                                    $page_name = $value['name'];
+                                }
+                                if($value['items']){
+                                    foreach($value['items'] as $thi_value){
+                                        if($thi_value['lang'] == $url){
+                                            $page_nav = '<a><cite>'.$vo['name'].'</cite></a>'.'<a><cite>'.$value['name'].'</cite></a>'.'<a><cite>'.$thi_value['name'].'</cite></a>';
+                                            $select=true;
+                                            $value['select_thi'] = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($url == $vo['lang']){
+                                $select = true;
+                                $page_nav = '<a><cite>'.$vo['name'].'</cite></a>';
+                                $page_name = $vo['name'];
+                            }
+                        }
+                    </php>
+                    <li class="layui-nav-item {$select && $vo['items']?'layui-nav-itemed':''}">
+                        <a href="{$vo['items']?'javascript:;':$vo['url']}" tip="{$vo.name}" class="menu-main {$select && !$vo['items']?'item-selected':''}">
+                            <h2>
+                                <php>var_dump();</php>
+                                <i class="fa fa-{$vo['icon']?$vo['icon']:'desktop'} normal"></i>
+                                {$vo.name}
+                            </h2>
+                        </a>
+                    <notempty name="vo.items">
+                        <dl class="layui-nav-child">
+                            <foreach name="vo.items" item="ivo">
+                                <li>
+                                <dd><a href="{$ivo['items'] ? 'javascript:;':$ivo['url']}" tip="{$ivo.name}" class="{$url==$ivo['lang']?'item-selected':''}" onclick="$('.layui-nav-last',$(this).parent().parent()).toggle();">
+                                        <i class="fa fa-circle-thin menu-sub-icon"></i><span class="menu-text">{$ivo.name}</span></a>
+                                </dd>
+                                <notempty name="ivo.items">
+                                    <dl class="layui-nav-last {$ivo['select_thi'] ? 'layui-nav-thi-select':''}">
+                                        <foreach name="ivo.items" item="lvo">
+                                            <li>
+                                            <dd><a href="{$lvo.url}" tip="{$lvo.name}" class="{$url==$lvo['lang']?'item-selected':''}"><i class="fa fa-caret-right menu-sub-icon"></i><span class="menu-text">{$lvo.name}</span></a></dd>
+                                            </li>
+                                        </foreach>
+                                    </dl>
+                                </notempty>
+                                </li>
+                            </foreach>
+                        </dl>
+                    </notempty>
+                    </li>
+                    </if>
+                </foreach>
+            </notempty>
+        </ul>
+    </div>
+</div>
+

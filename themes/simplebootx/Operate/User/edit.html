@@ -1,0 +1,195 @@
+<extend name="Operate/list_detail" />
+<block name="style">
+</block>
+<block name="btn">
+    <if condition="$user_status eq 1">
+        <div class="layui-input-inline" group="edit">
+            <button class="layui-btn layui-btn-normal layui-btn-small" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+            <div class="layui-btn layui-btn-danger layui-btn-small" onclick="cancelDetail();">{:L('CANCEL')}</div>
+        </div>
+        <if condition="$canEdit eq 1">
+        <div class="layui-input-inline" group="view">
+            <div class="layui-btn layui-btn-normal layui-btn-small" onclick="editDetail();">{:L('EDIT')}</div>
+            <div class="layui-btn layui-btn-normal layui-btn-small" onclick="ban()">拉黑</div>
+            <div class="layui-btn layui-btn-danger layui-btn-small" onclick="Delete()">{:L('DELETE')}</div>
+        </div>
+        </if>
+        <elseif condition="$user_status eq 0" />
+        <div class="layui-btn layui-btn-normal layui-btn-small" onclick="cancelban();">启用</div>
+    </if>
+
+</block>
+<block name="nav">
+    {:L('ADMIN_RBAC_INDEX')}<b class="arrow fa fa-angle-right normal"></b>{:L('ADMIN_RBAC_ROLEADD')}
+</block>
+<block name="detail">
+    <input type="hidden" name="id" value="{$id}" />
+    <div class="layui-form-item">
+        <!-- <label class="layui-form-label">{:L('PASSWORD')}</label> -->
+        <div class="layui-input-inline" >
+            <input type="hidden" name="user_pass" value=""  placeholder="******" group="edit">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_NAME')}</label>
+        <div class="layui-input-inline" >
+            <label class="layui-form-label layui-form-label-view" group="view" >{$usernameval}</label>
+            <input type="text" name="user_name" value="{$usernameval}"  placeholder="请输入用户昵称" group="edit">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERNICENAME')}</label>
+        <div class="layui-input-inline" >
+            <label class="layui-form-label layui-form-label-view" group="view" >{$user_nicename}</label>
+            <input type="text" name="user_nicename" value="{$user_nicename}"  placeholder="请输入用户昵称" group="edit">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_PHONE')}</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-label layui-form-label-view" group="view">{$mobile}</label>
+            <input type="text" name="mobile" value="{$mobile}"  placeholder="请输入用户电话" group="edit" required lay-verify="required|phone">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_EMAIL')}</label>
+        <div class="layui-input-inline" >
+            <input type="text" class="layui-input" name="user_email" data-origin="{$user_email}" value="{$user_email}" group="edit" placeholder="{:L('USERCOMPANY_EMAIL_INPUT')}" autocomplete="off">
+            <label class="layui-form-label layui-form-label-view" group="view">{$user_email}</label>
+        </div>
+    </div>
+    <if condition="$genre eq 2">
+        <notempty name="communities">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:L('USERCOMPANY_COMMUNITY')}</label>
+                <div class="layui-input-inline" >
+                    <label class="layui-form-label layui-form-label-view">{$community.name}</label>
+                </div>
+            </div>
+        </notempty>
+    </if>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('USERCOMPANY_ROLE')}</label>
+        <if condition="$is_com_admin['state'] gt 0">
+            <div class="layui-input-inline" >
+                <label class="layui-form-label layui-form-label-view">{$is_com_admin.type}</label>
+            </div>	
+            <else/>
+            <div class="layui-input-inline" group="edit">
+                <foreach name="roles" item="vo">
+                    <div class="layui-input-inline">
+                        <php>
+                            $role_id_selected = in_array($vo['id'],$role_ids, true)?"checked":"";
+                        </php>
+                        <input value="{$vo.id}"  type="checkbox" lay-skin="primary" name="role_id[]" title="{$vo.name}" {$role_id_selected}>
+                    </div>
+                </foreach>
+            </div>
+            <div class="layui-input-inline .layui-form-checkbox" group="view">
+                <foreach name="roles" item="co">
+                    <php>$role_name=in_array($co['id'],$role_ids)? $co['name']:"";</php>
+                    <php>if ($role_name) {</php>
+                    <label class="layui-form-label layui-form-label-view">{$role_name}</label>
+                    <php>}</php>
+                </foreach>
+            </div>
+        </if>
+    </div>
+
+    <input type="hidden" name="community" value="{:I('get.community')}">
+</block>
+
+<block name="script">
+    <script src="__PUBLIC__/simpleboot/layui/chosen/chosen.js"></script>
+    <script>
+            window.onload = function () {
+                $('#selectbox').find('.layui-form-select').remove();
+            };
+            $('.test-select').chosen({
+                width: '100%',
+                no_results_text: "没有匹配结果"
+            });
+            $('[group="edit"]').hide();
+
+            function editDetail() {
+                $('[group="view"]').hide();
+                $('[group="edit"]').show();
+//            initEdit();
+                layui.use('form', function () {
+                    form = layui.form(); //获取form组件
+                    form.render();
+                });
+            }
+
+            function cancelDetail() {
+                $('[group="view"]').show();
+                $('[group="edit"]').hide();
+            }
+
+            function getFormJson(form) {
+                var o = {};
+                var a = $(form).serializeArray();
+                $.each(a, function () {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            }
+
+
+            layui.use('form', function () {
+
+                form = layui.form(); //获取form组件
+
+
+//监听提交
+                form.on('submit(*)', function (data) {
+                    var fromdata = getFormJson('.layui-form');
+                    /*   layer.alert(JSON.stringify(fromdata)); */
+
+                    postData({
+                        url: "{:U('edit_post')}/genre/{$genre}",
+                        params: fromdata,
+                        success: function (result) {
+                            if (result.status == 1) {
+                                $('#tabList').bootstrapTable('refresh');
+                                showDetail("{:U('edit',['edit'=>$canEdit])}?id={$id}&genre={$genre}&community={$community.community_id}");
+                                layer.msg('编辑成功', {
+                                    time: 2000
+                                }, function () {
+                                    /*  closeDetail(); */
+                                });
+                            } else {
+                                layer.alert(result.info);
+                            }
+                        }
+                    });
+
+                    return false;
+                });
+                form.render();
+            });
+
+            function Delete() {
+                var DeleteUrl = "{:U('delete',array('id'=>$id,'genre'=>$genre))}";
+                deleteDetail(0, DeleteUrl, 'tabList');
+            }
+
+            function ban() {
+                var url = "{:U('ban',array('id'=>$id))}";
+                restoreDetail('	您确定要拉黑此用户吗？', url, 'tabList');
+            }
+            function cancelban() {
+                var url = "{:U('cancelban',array('id'=>$id))}";
+                restoreDetail('	您确定要启用此用户吗？', url, 'tabList');
+            }
+    </script>
+</block>

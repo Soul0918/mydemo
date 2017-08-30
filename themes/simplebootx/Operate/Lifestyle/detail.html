@@ -1,0 +1,166 @@
+<extend name="Operate/list"/>
+<style type="text/css">
+    tr{
+        height: 50px;
+    }
+</style>
+<block name="header">
+    <title>{:L(strtoupper(MODULE_NAME.'_'.CONTROLLER_NAME.'_'.ACTION_NAME))}-{:L('ADMIN_CENTER')}</title>
+</block>
+<block name="btn">
+    <div class="layui-btn layui-btn-normal layui-btn-small" onclick="a()">打印</div>
+    <div class="layui-form search-form">
+        <div class="layui-form-item">
+            <div class="layui-input-inline search-input">
+                <input class="layui-input"  autocomplete="off" placeholder="编号/标题" value="{:I('request.search')}" type="text" name="search" id="txtSearch">
+                <i id="search" class="layui-icon" onclick="searchData();" >&#xe615;</i>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="body">
+    <div id="ddd">
+        <!--<table class="layui-table">-->
+            <table class="layui-table" lay-skin="nob"  border="0" style=" border:1px solid #000000;margin-top: 0px">
+            <colgroup>
+                <col width="150">
+                <col>
+                <col  width="200">
+            </colgroup>
+
+            <tbody>
+            <tr height="150" rowspan="3">
+                <td><img src="//qr.api.cli.im/qr?data=test&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=418921644f0e70e115f9809e43379e36"></td>
+                <td>
+                    <div style="border-bottom:  medium double #000000;font-size: 20px;font-weight:bold"><p  style="letter-spacing:5px;">广州歌林科技有限公司<span style="font-size: 15px;margin-left: 40px">收款单据</span></p></div>
+                    <div><p style="">公司地址:广州市番禺区东环街番禺大道北555号节能科技园</p><p style="margin-left: 60px">内天安科技产业大厦2座304房</p></div>
+                    <div><p style="">联系电话:15017331566</p></div>
+                </td>
+                <td><p style="font-size: 18px;color: red">NO.{$lifestyle.lifestyle_id}</p></td>
+            </tr>
+            <tr height="60">
+                <td></td>
+                <td>客户编号:{$lifestyle.number}</td>
+                <td><p>日期：{$lifestyle.time}</p></td>
+            </tr>
+            <tr height="60">
+                <td></td>
+                <td>客户名称:{$lifestyle.name}</td>
+                <td></td>
+            </tr>
+            <tr height="60">
+                <td></td>
+                <td>收费项目:{$lifestyle.content}</td>
+                <td></td>
+            </tr>
+            <tr height="60">
+
+                <td colspan="2"><p style="margin-left: 50px">账户:{$lifestyle.zhanghu}</p></td>
+                <td><p>户名:{$lifestyle.zhanghu_name}</p></td>
+            </tr>
+            <tr height="60">
+                <td colspan="2" ><p style="margin-left: 50px">合计人民币（大写）:{$lifestyle.daxie}</p></td>
+                <td><p>收费金额:￥{$lifestyle.money}</p></td>
+            </tr>
+            <tr height="60">
+                <!--<td colspan="2"><p style="margin-left: 150px;font-size: 12px">备注：收据为2次打印，请注意重复；收款已实际到账金额为准。</p></td>-->
+                <td colspan="2"><p style="margin-left: 150px;font-size: 12px"></p></td>
+                <td colspan="1">开票人:{$lifestyle.username}</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <!--<table class="layui-table" style="margin-top: 15px">-->
+            <table class="layui-table" lay-skin="nob"  border="0" style=" border:1px solid #000000;margin-top: 0px">
+                <colgroup>
+                    <col width="150">
+                    <col>
+                    <col  width="200">
+                </colgroup>
+
+                <tbody>
+                <tr height="150" rowspan="3">
+                    <td><img src="//qr.api.cli.im/qr?data=test&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=418921644f0e70e115f9809e43379e36"></td>
+                    <td>
+                        <div style="border-bottom:  medium double #000000;font-size: 20px;font-weight:bold"><p  style="letter-spacing:5px;">广州歌林科技有限公司<span style="font-size: 15px;margin-left: 40px">收款单据</span></p></div>
+                        <div><p style="">公司地址:广州市番禺区东环街番禺大道北555号节能科技园</p><p style="margin-left: 60px">内天安科技产业大厦2座304房</p></div>
+                        <div><p style="">联系电话:15017331566</p></div>
+                    </td>
+                    <td><p style="font-size: 18px;color: red">NO.{$lifestyle.lifestyle_id}</p></td>
+                </tr>
+                <tr height="60">
+                    <td></td>
+                    <td>客户编号:{$lifestyle.number}</td>
+                    <td><p>日期：{$lifestyle.time}</p></td>
+                </tr>
+                <tr height="60">
+                    <td></td>
+                    <td>客户名称:{$lifestyle.name}</td>
+                    <td></td>
+                </tr>
+                <tr height="60">
+                    <td></td>
+                    <td>收费项目:{$lifestyle.content}</td>
+                    <td></td>
+                </tr>
+                <tr height="60">
+
+                    <td colspan="2"><p style="margin-left: 50px">账户:{$lifestyle.zhanghu}</p></td>
+                    <td><p>户名:{$lifestyle.zhanghu_name}</p></td>
+                </tr>
+                <tr height="60">
+                    <td colspan="2" ><p style="margin-left: 50px">合计人民币（大写）:{$lifestyle.daxie}</p></td>
+                    <td><p>收费金额:￥{$lifestyle.money}</p></td>
+                </tr>
+                <tr height="60">
+                    <!--<td colspan="2"><p style="margin-left: 150px;font-size: 12px">备注：收据为2次打印，请注意重复；收款已实际到账金额为准。</p></td>-->
+                    <td colspan="2"><p style="margin-left: 150px;font-size: 12px"></p></td>
+                    <td colspan="1">开票人:{$lifestyle.username}</td>
+                </tr>
+                </tbody>
+            </table>
+    </div>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/js/custom/app.js"></script>
+    <script src="__PUBLIC__/js/hcjs/jquery.jqprint-0.3.js"></script>
+    <script>
+        function  a(){
+            $("#ddd").jqprint();
+        }
+        $(function () {
+            $('#tabList').bootstrapTable({
+                url: "{:U('table_data')}",
+                sortOrder: 'desc',
+                queryParams: getQueryParams,
+                onLoadError: function (data) {
+                    $('#tabList').bootstrapTable('removeAll');
+                },
+                onDblClickRow: function (row, e, field) {
+                    rowSelected(e);
+                    if (field != 'control') {
+                        showDetail('{:U(\'edit\')}?id=' + row.lifestyle_id);
+                    }
+                }
+            });
+            $('#txtSearch').keyup(function (e) {
+                if (e.keyCode == 13) {
+                    $('#search').trigger('click');
+                }
+            });
+        });
+
+        function searchData() {
+            $('#tabList').bootstrapTable('refresh');
+        }
+        function getQueryParams(params) {
+            params['search'] = $('#txtSearch').val();
+            return params;
+        }
+
+        function add(){
+            showDetail('{:U("add")}');
+        }
+    </script>
+</block>
+</html>

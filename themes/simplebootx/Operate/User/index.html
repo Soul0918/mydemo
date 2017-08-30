@@ -1,0 +1,188 @@
+<extend name="Operate/list"/>
+<block name="header">
+    <title>{:L(strtoupper(MODULE_NAME.'_'.CONTROLLER_NAME.'_'.ACTION_NAME))}-{:L('ADMIN_CENTER')}</title>
+</block>
+<block name="btn">
+    <button class="layui-btn layui-btn-normal layui-btn-small" onclick="showDetailForm();">{:L('ADMIN_USER_ADD')}</button>
+    <div class="layui-form search-form">
+        <div class="layui-form-item">
+            <if condition="$genre gt 0">
+                <div class="layui-input-inline">
+                    <select name="companys" name="companys" lay-filter="companys">
+                        <option value="0">全部公司</option> 
+                        <foreach name="companys" item="vo">
+                            <option value="{$vo.id}">{$vo.company_name}</option> 
+                        </foreach>
+                    </select>
+                </div>
+            </if>
+            <if condition="$genre gt 1">
+                <div class="layui-input-inline">
+                    <select name="community" name="community" lay-filter="community">
+                        <option value="0">全部小区</option> 
+                        <foreach name="communities" item="vo">
+                            <option value="{$vo.community_id}">{$vo.name}</option> 
+                        </foreach>
+                    </select>
+                </div>
+            </if>
+            <div class="layui-input-inline search-input">
+                <input class="layui-input"  autocomplete="off" placeholder="用户名/昵称/邮箱" value="{:I('request.keyword')}" type="text" name="search" id="txtSearch">
+                <i id="search" class="layui-icon" onclick="searchData();" >&#xe615;</i>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="body">
+    <table class="table table-bordered" id="tabList" data-page-list="[10,20,50]">
+        <thead>
+            <tr>
+                <th data-field="control" data-formatter="controlFormatter" data-width="50" data-align="center">{:L('ACTIONS')}</th>
+                <th data-field="user_name" data-sortable="true" data-width="100">{:L('USERCOMPANY_NAME')}</th>
+                <th data-field="mobile" data-sortable="true" data-width="120">{:L('USERCOMPANY_PHONE')}</th>
+                <!-- 			<th data-field="user_activation_key" data-formatter="actFormatter" data-sortable="true" data-width="120">邀请码</th> -->
+                <th data-field="last_login_time" data-formatter="last_login_timeFormatter" data-sortable="true" data-width="160">{:L('USERCOMPANY_LAST_LOGIN_TIME')}</th>
+                <th data-field="user_email" data-sortable="true" data-width="100">{:L('USERCOMPANY_EMAIL')}</th>
+        <if condition="$genre gt 0">
+            <th data-field="company_name"  data-width="100">所属物业公司</th>
+        </if>
+        <if condition="$genre eq 2">
+            <th data-field="community_name"   data-width="100">所属小区</th>
+        </if>
+        <th data-field="user_status" data-formatter="statusFormatter" data-sortable="true" data-width="60">{:L('STATUS')}</th>
+        </tr>
+        </thead>
+    </table>
+
+</block>
+<!--  -->
+<block name="script">
+    <script>
+        /* 定义删除id变量以及url变量 */
+        /* var deleteUrl; */
+        load();
+        function load(objParam) {
+            $('#tabList')
+                    .bootstrapTable(
+                            {
+                                method: 'get',
+                                url: "{:U('table_data', array('genre'=>$genre))}",
+                                idField: "id", //标识哪个字段为id主键
+                                queryParams: getQueryParams,
+                                sortName: 'id',
+                                sortOrder: 'desc',
+                                onLoadError: function (data) {
+                                    $('#tabList').bootstrapTable('removeAll');
+                                },
+                                onDblClickRow: function (row, e, field) {
+                                    $('.rowselected').removeClass('rowselected');
+                                    $(e).addClass('rowselected');
+                                    if (field != 'control') {
+                                        showDetail("{:U('edit')}?id=" + row.id);
+                                    }
+                                }
+                            });
+        }
+
+
+        function searchData() {
+            $('#tabList').bootstrapTable('refresh');
+        }
+        function getQueryParams(params) {
+            params['search'] = $('[name=search').val();
+            params['company_id'] = $('[name=companys]').val();
+            params['community_id'] = $('[name=community]').val();
+            return params;
+        }
+
+        function showDetailForm() {
+            showDetail("{:U('add',array('genre'=>$genre))}");
+        }
+
+        function showDetailEdit(id, _) {
+            showDetail("{:U('edit',['edit'=>$canEdit])}?id=" + id + "&genre={$genre}" + _)
+        }
+
+        function controlFormatter(value, row) {
+            var $control = [];
+            $control.push('<a class="table_btn" href="javascript:void(0)" onclick="showDetailEdit(' + row.id + ')">{:L(\'DETAIL\')}</a>');
+            return $control;
+        }
+
+        function statusFormatter(value, row) {
+            if (parseInt(value) == 1) {
+                return '正常';
+            } else if (parseInt(value) == 2) {
+                return '未验证'
+            } else if (parseInt(value) == 0) {
+                return '已拉黑'
+            }
+        }
+
+        function last_login_timeFormatter(value, row) {
+            if (value ==  '2000-01-01 00:00:00') {
+                return '--';
+            } else {
+                return value;
+            }
+        }
+
+        function actFormatter(value, row) {
+            var value = JSON.parse(value);
+            var expired = value.expired;
+            if (value) {
+                if (value.expired < 0) {
+                    expired = '已过期';
+                } else {
+                    expired = expired + '分钟后过期';
+                }
+                return value.code + '(' + expired + ')';
+            } else {
+                return '-';
+            }
+        }
+
+        function communityFormatter(value, row) {
+            return row.community_name;
+        }
+
+
+        $('#txtSearch').keyup(function (e) {
+            if (e.keyCode == 13) {
+                $('#search').trigger('click');
+            }
+        });
+
+        layui.use('form', function () {
+            form = layui.form();
+            form.on('select(companys)', function (ele) {
+                $('[name=community]').val(0);
+                $('[name=companys]').val(ele.value);
+                $('#tabList').bootstrapTable('refresh');
+                getXiaoqu(ele.value);
+            });
+            form.on('select(community)', function (ele) {
+                $('[name=community]').val(ele.value);
+                $('#tabList').bootstrapTable('refresh');
+            });
+        })
+
+        function getXiaoqu(id) {
+            $.getJSON('{:U("Rbac/getCommunities")}', {
+                company_id: id
+            }, function (ci_objData) {
+                $('[name=community]').empty();
+                var objHtml = [];
+                objHtml.push('<option value="0">全部小区</option>');
+                if (ci_objData.rows != undefined && ci_objData.rows.length > 0) {
+                    $.each(ci_objData.rows, function () {
+                        objHtml.push('<option value="' + this.community_id + '" >' + this.name + '</option>');
+                    });
+                }
+                $(objHtml.join('')).appendTo('[name=community]');
+                form.render();
+            });
+        }
+
+    </script>
+</block>

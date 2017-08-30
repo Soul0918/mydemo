@@ -1,0 +1,117 @@
+<extend name="Operate/list_detail" />
+<block name='btn'>
+    <div class="layui-btn layui-btn-normal layui-btn-small" onclick="editDetail();" group="view">{:L('EDIT')}</div>
+    <div class="layui-btn layui-btn-danger layui-btn-small" onclick="del();" group="view">{:L('DELETE')}</div>
+    <div class="layui-input-inline" group="edit">
+        <button class="layui-btn layui-btn-normal layui-btn-small" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+        <div class="layui-btn layui-btn-danger layui-btn-small" onclick="cancelDetail();">{:L('CANCEL')}</div>
+    </div>
+</block>
+<block name="nav">
+    收据管理<b class="arrow fa fa-angle-right normal"></b>详情
+</block>
+<block name="detail">
+    <input type="hidden" name="lifestyle[lifestyle_id]"  value="{$lifestyle.lifestyle_id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">客户编码</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-label layui-form-label-view" group="view">{$lifestyle.number}</label>
+            <input type="text" name="lifestyle[number]" placeholder="请输入标题"  class="layui-input" group="edit" value="{$lifestyle.number}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">客户名称</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-label layui-form-label-view" group="view">{$lifestyle.name}</label>
+            <input type="text" name="lifestyle[name]" placeholder="请输入标题"  class="layui-input" group="edit" value="{$lifestyle.name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">收费项目</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-label layui-form-label-view" group="view">{$lifestyle.content}</label>
+            <input type="text" name="lifestyle[content]" placeholder="请输入标题"  class="layui-input" group="edit" value="{$lifestyle.content}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">收费金额</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-label layui-form-label-view" group="view">{$lifestyle.money}</label>
+            <input type="text" name="lifestyle[money]" placeholder="请输入标题"  class="layui-input" group="edit" value="{$lifestyle.money}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">户名</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-label layui-form-label-view" group="view">{$lifestyle.zhanghu_name}</label>
+            <label class="layui-form-label layui-form-label-view" group="edit">{$lifestyle.zhanghu_name}</label>
+            <!--<input type="text" name="lifestyle[huming]" placeholder="请输入标题"  class="layui-input" group="edit" value="{$lifestyle.huming}">-->
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账户</label>
+        <label class="layui-form-label layui-form-label-view" group="view">{$lifestyle.zhanghu}</label>
+        <div class="layui-input-inline" group="edit">
+            <select name="lifestyle[zhanghu]" lay-verify="">
+                <option value="6224 3927 0000 3779 61 广州市农村商业银行番禺天安支行">6224 3927 0000 3779 61 广州市农村商业银行番禺天安支行</option>
+                <option value="6224 3927 0000 3779 79 广州市农村商业银行番禺天安支行">6224 3927 0000 3779 79 广州市农村商业银行番禺天安支行</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-label layui-form-label-view" group="view">{$lifestyle.time}</label>
+            <input type="text" name="lifestyle[time]" placeholder="yyyy-MM-dd" class="layui-input" group="edit" value="{$lifestyle.time}">
+        </div>
+    </div>
+
+
+</block>
+<block name='script'>
+    <script type="text/javascript">
+                    $('[group="edit"]').hide();
+
+                    function editDetail() {
+                        $('[group="view"]').hide();
+                        $('[group="edit"]').show();
+                    }
+
+                    function del() {
+                        var url = "{:U('delete',array('id'=>$lifestyle['lifestyle_id']))}";
+                        restoreDetail('确认要删除该记录吗？', url, 'tabList');
+                    }
+
+                    function cancelDetail() {
+                        $('[group="view"]').show();
+                        $('[group="edit"]').hide();
+                    }
+                    layui.use('form', function () {
+                        form = layui.form(); //获取form组件
+                        //监听提交
+                        form.on('submit(*)', function (data) {
+                            /*if(ue.getContent().length == 0){
+                                layer.alert('请填写内容');
+                                return false;
+                            }*/
+                            postData({
+                                url: "{:U('edit_post')}",
+                                params: data.field,
+                                success: function (result) {
+                                    if (result.status == 1) {
+                                        $('#tabList').bootstrapTable('refresh');
+                                        layer.msg(result.info, {
+                                            time: 2000
+                                        }, function () {
+                                            showDetail(result.url);
+                                        });
+                                    } else {
+                                        layer.alert(result.info);
+                                    }
+                                }
+                            });
+                            return false;
+                        });
+                    });
+    </script>
+</block>

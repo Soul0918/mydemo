@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is page-header (.page-header &gt; h1)">
+    <link rel="shortcut icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico">
+    <script>
+        //全局变量
+        var GV = {
+            HOST: "{$_SERVER['HTTP_HOST']}",
+            ROOT: "__ROOT__/",
+            WEB_ROOT: "__WEB_ROOT__/",
+            JS_ROOT: "public/js/",
+            PUBLIC: "__PUBLIC__"
+        };
+    </script>
+    <script src="__PUBLIC__/js/wind.js"></script>
+    <!--异步加载css-->
+    <script>
+        Wind.css("__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css");
+        Wind.css("__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome.min.css?page=index");
+        Wind.css("__PUBLIC__/simpleboot/layui/css/layui.css");
+        Wind.css("__PUBLIC__/simpleboot/layui/css/global.css");
+        Wind.css("__PUBLIC__/js/artDialog/skins/default.css");
+        Wind.css("__PUBLIC__/bootstrap-table-master/dist/bootstrap-table.min.css");
+        /*Wind.css("__PUBLIC__/css/themes_blue.css");*/
+
+        function setBodyHeight() {
+            var iTop = $('#divTitle').offset().top + $('#divTitle').height() + 1;
+            $('#divBody').css('top', iTop + 'px');
+            $('#divBody').height($('#divMenu').height() - $('#divTitle').height() - 60);
+
+            if ($('#' + GV.DETAIL_ID).length > 0) {
+                $('#' + GV.DETAIL_ID).parent().height($('#divBody').height());
+                $('#' + GV.DETAIL_ID).height($('#divBody').height());
+                if ($('#divInput').length > 0) {
+                    $('#divInput').height($('#' + GV.DETAIL_ID).height() - 40);
+                }
+            }
+        }
+    </script>
+    <script src="__PUBLIC__/js/jquery.js"></script>
+    <!--[if IE 7]>
+    <link href="__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <![endif]-->
+    <!--[if lte IE 8]>
+    <link href="__PUBLIC__/simpleboot/css/simplebootadminindex-ie.css?" rel="stylesheet"/>
+    <![endif]-->
+    <style>
+        .menu-sub-icon { width: 18px; height: auto; font-size: 12px; font-weight: normal; line-height: 12px; text-align: center; }
+        .brand { font-family: "Microsoft YaHei", "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti; padding: 0 37px 0 49px; margin: 0; height: 60px; display: inline-block; font-size: 13px; line-height: 60px; background-image: url('__PUBLIC__/images/logo.png'); background-repeat: no-repeat; background-size: 29px; background-position: 14px; color: #fff; }
+        .footer { height: 50px; bottom: 0; color: #a5a5a5; border-top: 1px solid #d2d2d2; text-align: center; font-size: 13px; line-height: 50px; padding: 0; background-color: initial !important; }
+        h2 { color: white; }
+        dd { line-height: 38px; }
+        a:link { text-decoration: none; }
+        a:visited { text-decoration: none; }
+        a:hover { text-decoration: none; }
+        a:active { text-decoration: none; }
+        a{cursor:pointer;}
+        .btn:focus { background-position: 0 30px !important; }
+        body { overflow: hidden; }
+        .rowselected { background-color: #ccc; }
+        /*.layui-btn-normal { background-color: #2196f3; }*/
+        .layui-form-selected dl { z-index: 9999; }
+        input[type="text"], input[type="password"] { height: 38px; line-height: 38px; }
+        input[type=radio] { display: none; }
+        /*顶部搜索框的样式*/
+        .search-form { font-size: 14px; display: inline-block; float: right; }
+            .search-form .layui-form-item { margin-bottom: 0px; }
+            .search-form .search-input { width: 300px; position: relative; }
+        #txtSearch { padding-right: 25px; }
+        .search-form .layui-icon { position: absolute; right: 10px; top: 13px; cursor: pointer; color: #999; }
+        /*************/
+
+        .table-bordered td { word-break: break-all; word-wrap: break-word; }
+
+        .table_btn {  text-decoration: underline !important; }
+        .layui-nav-last{display:none;}
+        .layui-nav-thi-select{display:block;}
+        .layui-nav .layui-nav-child .layui-nav-last a{    padding: 0 30px;}
+    </style>
+
+    <block name="header"></block>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <include file="./Operate/Public/menu" />
+        <div>
+            <div id="divTitle" class="layui-tab-title site-demo-title" style="top: 60px; height: auto; z-index:999; min-width:1100px;">
+                <span class="layui-breadcrumb" style="background-color: #e9f0f9; padding: 0 20px 0; margin: 0; border: none; height: 45px; display: flex; align-items: center; ">
+                    {$page_nav}
+                </span>
+                <div id="divBtn">
+                    <block name="btn"></block>
+                </div>
+                <script>
+                    {
+                        if ($('#divBtn').children().length > 0) {
+                            $('#divBtn').css('padding', '10px');
+                        }
+                    }
+                </script>
+            </div>
+            <div id="divBody" class="layui-body layui-tab-content site-demo site-demo-body">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-main" style="margin: 0 15px;">
+                        <block name="body"></block>
+                    </div>
+                </div>
+            </div>
+            <block name="exbody"></block>
+        </div>
+        <include file="./Operate/Public/footer" />
+    </div>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
+    <!--<script src="__TMPL__Managment/Public/assets/js/index.js"></script>-->
+    <script src="__PUBLIC__/simpleboot/layui/layui.js"></script>
+    <script src="__PUBLIC__/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="__PUBLIC__/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="__PUBLIC__/js/hcjs/jquery.table.js"></script>
+    <script src="__PUBLIC__/js/hcjs/jquery.detail.js"></script>
+
+    <script>
+        layui.use('element');
+        setBodyHeight();
+        setTimeout(function () {
+            setBodyHeight();
+        }, 1000);
+        $(window).resize(function () {
+            setBodyHeight();
+        });
+        function clearCache(){
+            postData({
+              url: "{:U('index.php/Operate/index/clear_cache')}",
+              success: function (result) {
+                  if (result.status == 0) {
+                      layer.info('清空成功', {
+                          time: 2000
+                      }, function () {
+                          closeDetail();
+                      });
+                  }
+                 else {
+                      layer.alert(result.info);
+                  }
+              }
+            });
+        }
+        function updateMenu(){
+            postData({
+              url: "{:U('index.php/Operate/index/updateMenu')}",
+              success: function (result) {
+                  if (result.status == 0) {
+                      layer.alert('更新成功', {
+                          time: 2000
+                      }, function () {
+                          closeDetail();
+                          location.reload();
+                      });
+                  }
+                 else {
+                      layer.alert(result.info);
+                  }
+              }
+            });
+        }
+        function updateAuthCache(){
+            postData({
+              url: "{:U('index.php/Operate/index/update_device_auth_cache')}",
+              success: function (result) {
+                  if (result.status == 0) {
+                      layer.alert('更新成功', {
+                          time: 2000
+                      }, function () {
+                          closeDetail();
+                          location.reload();
+                      });
+                  }
+                 else {
+                      layer.alert(result.info);
+                  }
+              }
+            });
+        }
+    </script>
+
+    <block name="script"></block>
+
+    <if condition="$admin['setting']">
+        <if condition="!empty($admin['setting']['agreement']) and $admin['setting']['agreement'] == 'no'">
+            <script>
+                var config = {
+                    skin: '',
+                    closeBtn: 0,
+                    btn: ['同意', '关闭'],
+                    yes: function () {
+                        if (confirm('是否同意?')) {
+                            $.post('{:U(\'Public/agreement_post\')}');
+                        }
+                        layer.closeAll();
+                    },
+                    cancel: function (index) {
+                        if (confirm('确定要关闭么?')) {
+                            layer.close(index);
+                            window.location.href = '{:U(\'Public/logout\')}';
+                        }
+                        return false;
+                    }
+                }
+                open_iframe_layer('{:U(\'Public/agreement\')}', '用户协议', config);
+                function controlFormatter(value, row) {
+                    var state = row.state;
+                    var $control = [];
+                    $control.push('<a class="table_btn" href="javascript:void(0);" onclick="myShowDetail(' + row.community_id + ');">{:L(\'DETAIL\')}</a>');
+                    return $control;
+            	}
+            </script>
+        </if>
+    </if>
+</body>
+</html>

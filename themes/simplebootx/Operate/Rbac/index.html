@@ -1,0 +1,159 @@
+<extend name="Operate/list"/>
+<block name="header">
+    <title>{:L(strtoupper(MODULE_NAME.'_'.CONTROLLER_NAME.'_'.ACTION_NAME))}-{:L('ADMIN_CENTER')}</title>
+</block>
+<block name="btn">
+    <!--<button class="layui-btn layui-btn-normal layui-btn-small" onclick="showDetailForm();">{:L('ROLE_ROLEADD')}</button>-->
+    <div class="layui-form search-form">
+        <div class="layui-form-item">
+            <if condition="$genre gt 0">
+                <div class="layui-input-inline">
+                    <select name="companys" name="companys" lay-filter="companys">
+                        <option value="0">全部公司</option> 
+                        <foreach name="companys" item="vo">
+                            <option value="{$vo.id}">{$vo.company_name}</option> 
+                        </foreach>
+                    </select>
+                </div>
+            </if>
+            <if condition="$genre gt 1">
+                <div class="layui-input-inline">
+                    <select name="community" name="community" lay-filter="community">
+                        <option value="0">全部小区</option> 
+                        <foreach name="communities" item="vo">
+                            <option value="{$vo.community_id}">{$vo.name}</option> 
+                        </foreach>
+                    </select>
+                </div>
+            </if>
+            <div class="layui-input-inline search-input">
+                <input class="layui-input"  autocomplete="off" placeholder="角色名称/角色描述" value="{:I('request.search')}" type="text" name="search" id="txtSearch">
+                <i id="search" class="layui-icon" onclick="searchData();" >&#xe615;</i>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="body">
+    <table id="tabList" class="table table-bordered" data-page-list="[10,20,50]">
+        <thead>
+            <tr>
+                <th data-field="control" data-formatter="controlFormatter" data-valign="middle"  data-action="haha" data-width="50">{:L('ACTIONS')}</th>
+                <th data-field="id"  data-sortable="true" data-valign="middle"  data-width="20" data-visible="false">ID</th>
+                <th data-field="name" data-sortable="true"  data-valign="middle"  data-width="100">{:L('ROLE_NAME')}</th>
+                <th data-field="remark" data-sortable="true" data-valign="middle"  data-width="100">{:L('ROLE_DESCRIPTION')}</th>
+        <if condition="$genre eq 1">
+            <th data-field="company_name" data-align="center" data-valign="middle"  data-width="100">所属公司</th>
+        </if>
+        <if condition="$genre eq 2">
+            <th data-field="company_name" data-align="center" data-valign="middle"  data-width="100">所属公司</th>
+            <th data-field="community_name" data-align="center" data-valign="middle"  data-width="100">所属小区</th>
+        </if>
+        <th data-field="status" data-formatter="statusFormatter" data-sortable="true" data-width="60" data-valign="middle" >{:L('STATUS')}</th>
+        </tr>
+        </thead>
+    </table>
+</block>
+<block name="script">
+    <script>
+        var 　_iCommunityid;
+        var  form;
+        load();
+
+        function load() {
+            $('#tabList').bootstrapTable({
+                method: 'get',
+                url: "{:U('table_data',['genre'=>$genre])}",
+                idField: "id",
+                sortName: 'id',
+                sortOrder: 'desc',
+                queryParams: getQueryParams,
+                onLoadError: function (data) {
+                    $('#tabList').bootstrapTable('removeAll');
+                },
+                onDblClickRow: function (row, e, field) {
+                    $('.rowselected').removeClass('rowselected');
+                    $(e).addClass('rowselected');
+                    if (field != 'control') {
+                        showDetail("{:U('roleedit')}/id/" + row.id + "/genre/{$genre}");
+                    }
+
+                }
+            });
+        }
+
+        function getQueryParams(params) {
+            params['search'] = $('#txtSearch').val();
+            params['company_id'] = $('[name=companys]').val();
+            params['community_id'] = $('[name=community]').val();
+            return params;
+        }
+        layui.use('form', function () {
+             form = layui.form();
+             form.on('select(companys)', function (ele) {
+                $('[name=community]').val(0);
+                $('[name=companys]').val(ele.value);
+                $('#tabList').bootstrapTable('refresh');
+                getXiaoqu(ele.value);
+            });
+            form.on('select(community)', function (ele) {
+                $('[name=community]').val(ele.value);
+                $('#tabList').bootstrapTable('refresh');
+            });
+        })
+
+
+        $('#txtSearch').keyup(function (e) {
+            if (e.keyCode == 13) {
+                $('#search').trigger('click');
+            }
+        });
+        function searchData() {
+            $('#tabList').bootstrapTable('refresh');
+        }
+        
+        function getXiaoqu(id) {
+            $.getJSON('{:U("Rbac/getCommunities")}', {
+                company_id: id
+            }, function (ci_objData) {
+                $('[name=community]').empty();
+                var objHtml = [];
+                objHtml.push('<option value="0">全部小区</option>');
+                if (ci_objData.rows != undefined && ci_objData.rows.length > 0) {
+                    $.each(ci_objData.rows, function () {
+                        objHtml.push('<option value="' + this.community_id + '" >' + this.name + '</option>');
+                    });
+                }
+                $(objHtml.join('')).appendTo('[name=community]');
+                form.render();
+            });
+        }
+    </script>
+    <script>
+
+        function communityFormatter(value, row) {
+            return row.community_name
+        }
+
+        function statusFormatter(value, row) {
+            if (parseInt(value) == 1) {
+                return '开启';
+            } else if (parseInt(value) == 0) {
+                return '关闭';
+            }
+        }
+
+        function controlFormatter(value, row) {
+            var $control = [];
+            $control.push('<a class="table_btn" href="javascript:void(0)" onclick="showDetailEdit(' + row.id + ')">{:L(\'DETAIL\')}</a>');
+            return $control.join(' | ');
+        }
+
+        function showDetailForm() {
+            showDetail("{:U('roleadd',array('genre'=>$genre))}");
+        }
+
+        function showDetailEdit(id) {
+            showDetail("{:U('roleedit',array('genre'=>$genre))}/id/" + id);
+        }
+    </script>
+</block>

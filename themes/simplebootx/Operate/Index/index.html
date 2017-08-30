@@ -1,0 +1,92 @@
+<extend name="Operate/list"/>
+<block name="header">
+    <title>{:L(strtoupper(MODULE_NAME.'_'.CONTROLLER_NAME.'_'.ACTION_NAME))}-{:L('ADMIN_CENTER')}</title>
+</block>
+<block name="btn">
+    <button class="layui-btn layui-btn-normal layui-btn-small" onclick="showDetail('{:U('company/add')}');">添加</button>
+    <div class="layui-form search-form">
+        <div class="layui-form-item">
+            <div class="layui-input-inline search-input">
+                <input class="layui-input"  autocomplete="off" placeholder="公司名称" value="{:I('request.search')}" type="text" name="search" id="txtSearch">
+                <i id="search" class="layui-icon" onclick="searchData();" >&#xe615;</i>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="body">
+    <div class="wrap js-check-wrap">
+        <table id="tabList"
+               class="table table-hover"
+               data-side-pagination="server"
+               data-pagination="true"
+               data-page-list="[10, 20, 50]"
+               data-page-size="10"
+               >
+            <thead>
+                <tr>
+                    <th data-field="control" data-formatter="controlFormatter" data-action="haha" data-width="120">{:L('ACTIONS')}</th>
+                    <th data-field="company_name" data-sortable="true">{:L('X_COMPANY_INDEX_NAME')}</th>
+                    <!--<th data-field="remark" data-sortable="true">{:L('X_COMPANY_INDEX_REMARK')}</th>-->
+                    <th data-field="logo" data-formatter="logoFormatter" data-sortable="true">Logo</th>
+                    <th data-field="uname" data-formatter="usernameFormatter" data-sortable="true">{:L('X_COMPANY_INDEX_ADMIN')}</th>
+                    <th data-field="create_time" data-sortable="true">{:L('X_COMPANY_CREATE_TIME')}</th>
+                    <th data-field="update_time" data-sortable="true">{:L('X_COMPANY_UPDATE_TIME')}</th>
+                    <th data-field="company_status" data-formatter="statusFormatter" data-sortable="true">{:L('STATUS')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script>
+        $(function () {
+            $('#tabList').bootstrapTable({
+                url: "{:U('company/table_data')}",
+                sortOrder: 'desc',
+                queryParams: getQueryParams,
+                onLoadError: function (data) {
+                    $('#tabList').bootstrapTable('removeAll');
+                },
+                onDblClickRow: function (row, e, field) {
+                    rowSelected(e);
+                    if (field != 'control') {
+                        showDetail('{:U(\'company/edit\')}?id=' + row.id);
+                    }
+                }
+            });
+        });
+        function logoFormatter(value, row) {
+            return '<img width="25" height="25" src="{:U(\'Operate/public/logo\')}/id/' + row.id + '" onclick="image_preview_dialog(this.src)">';
+        }
+
+        function usernameFormatter(value, row) {
+            //return '<a href="{:U(\'admin/user/edit\')}/id/' + value + '" title="' + row.user.user_nicename + '">' + row.user.user_nicename + '</a>';
+            return value;
+        }
+
+        function statusFormatter(value, row) {
+            if (parseInt(value) == 1) {
+                return '<font color="red">√</font>';
+            } else {
+                return '<font color="red">╳</font>';
+            }
+        }
+
+        function controlFormatter(value, row) {
+            return '<a onclick="showDetail(\'{:U(\'company/edit\')}/id/' + row.id + '\')" class="table_btn">详情</a>';
+        }
+
+        $('#txtSearch').keyup(function (e) {
+            if (e.keyCode == 13) {
+                $('#search').trigger('click');
+            }
+        });
+
+        function searchData() {
+            $('#tabList').bootstrapTable('refresh');
+        }
+
+        function getQueryParams(params) {
+            params['search'] = $('#txtSearch').val();
+            return params;
+        }
+    </script>
+</block>

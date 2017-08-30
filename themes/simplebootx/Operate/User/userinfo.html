@@ -1,0 +1,130 @@
+<extend name="Operate/detail" />
+<block name="header">
+    <title>{:L(strtoupper(MODULE_NAME.'_'.CONTROLLER_NAME.'_'.ACTION_NAME))}-{:L('ADMIN_CENTER')}</title>
+    <style>
+        input[type="text"] { width: 250px; }
+        .layui-form-item .layui-input-inline {width: 250px;}
+    </style>
+</block>
+<block name="btn">
+    <button class="layui-btn layui-btn-normal layui-btn-small" id="submit" type="submit" lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+</block>
+<block name="body">
+    <!-- <form class="layui-form" method="post" action="{:U('User/userinfo_post')}"> -->
+    <div id="userinfo" style="margin-top:20px;">
+            <fieldset>
+                <div class="layui-form-item">
+                        <label class="layui-form-label">{:L('REALNAME')}</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="user_name" required  lay-verify="required" autocomplete="off" placeholder="{:L('INPUT_REALNAME')}" class="layui-input" value="{$user_name}">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux" style="color:red;" group="edit">*</div>
+                </div>
+                <div class="layui-form-item">
+                        <label class="layui-form-label">{:L('NICKNAME')}</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="user_nicename" required  lay-verify="required" autocomplete="off" placeholder="{:L('INPUT_NICKNAME')}" class="layui-input" value="{$user_nicename}">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux" style="color:red;" group="edit">*</div>
+                </div>
+
+                <div class="layui-form-item"></div>
+
+                <div class="layui-form-item">
+                    <!--电话-->
+                        <label class="layui-form-label" for="input-user_url">{:L('PHONENUM')}</label>
+                        <div class=layui-input-inline>
+                            <input type="text" id="input-user_url" name="mobile" lay-verify="required" placeholder="{:L('INPUT_PHONENUM')}" autocomplete="off" class="layui-input" value="{$mobile}">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux" style="color:red;" group="edit">*</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:L('GENDER')}</label>
+                    <div class="layui-input-inline sex-radio">
+                        <input type="radio" name="sex" value="0" title="{:L('GENDER_SECRECY')}">
+                        <input type="radio" name="sex" value="1" title="{:L('MALE')}">
+                        <input type="radio" name="sex" value="2" title="{:L('FEMALE')}">
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <!--邮箱-->
+                        <label class="layui-form-label" for="input-user_url">{:L('EMAIL')}</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="input-user_url" placeholder="http://thinkcmf.com" name="user_email" value="{$user_email}">
+                        </div>
+                </div>
+
+
+                <!--按钮-->
+                <!--
+                <div class="form-actions">
+                    <button type="submit" class="layui-btn layui-btn-normal">{:L('SAVE')}</button>
+                </div> -->
+            </fieldset>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+        var sex = '{$sex}';
+        $(".sex-radio input").each(function () {
+            var this_sex = $(this).val();
+            if (this_sex == sex) {
+                $(this).attr("checked", 'checked');
+            }
+        });
+
+
+//         //提交
+//         $('#submit').click(function () {
+//             $.ajax({
+//                 type: "POST",
+//                 url: "{:U('User/userinfo_post')}",
+//                 data: $("#userinfo").serialize(),
+//                 datatype: "html",
+//                 success: function (data) {
+//                     alert(data.info);
+//                     //$("#msg").html(decodeURI(data));
+//                 },
+//                 error: function () {
+//                 }
+//             });
+//         });
+        layui.use('form', function () {
+            var form = layui.form();
+
+          //监听提交
+     	   form.on('submit(*)', function (data) {
+//      	    	var fromdata = getFormJson('.layui-form');
+     			/*layer.alert(JSON.stringify(fromdata));*/ 
+     	        postData({
+     	            url: "{:U('userinfo_post')}",
+     	            params: $("form").serialize(),
+     	            success: function (result) {
+     	                if (result.status == 1) {
+//      	                	$('#tabList').bootstrapTable('refresh');
+//      	                	showDetail("{:U('edit')}?id={$device.device_id}");
+//      	                    layer.msg('保存成功', {
+//      	                        time: 2000
+//      	                    });
+     	                	layer.msg('您的信息已经修改成功！', {
+                                icon:1,
+                      		  time: 20000, //20s后自动关闭
+                      		  btn: ['知道了'],
+                      		  yes: function(index){
+                      		    layer.close(index);
+                      		  }
+                      		});
+     	                }
+     	               else {
+     	                    layer.alert(result.info);
+     	                }
+     	            }
+     	        });
+     	        return false;
+     	    });
+            form.render('radio');
+        });
+    </script>
+</block>

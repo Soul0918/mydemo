@@ -1,0 +1,220 @@
+<extend name="Operate/list_detail" />
+<block name="style">
+</block>
+<block name="btn">
+    <div class="layui-input-inline" group="edit">
+        <button class="layui-btn layui-btn-normal layui-btn-small"
+                lay-filter="*" lay-submit="">{:L('SAVE')}</button>
+        <div class="layui-btn layui-btn-danger layui-btn-small" onclick="cancelDetail();">{:L("CANCEL")}</div>
+    </div>
+    <div class="layui-input-inline" group="view">
+        <if condition="$data['type'] neq 1">
+            <div class="layui-btn layui-btn-normal layui-btn-small" onclick="editDetail();">{:L("EDIT")}</div>
+
+
+        </if>
+        <if condition="$data['type'] neq 1 and $data['status'] eq 1">
+            <div class="layui-btn layui-btn-normal layui-btn-small" onclick="authorize()">{:L("ROLE_SETTING")}</div>
+        </if>
+        <if condition="$data['status'] eq 1">
+            <div class="layui-btn layui-btn-normal layui-btn-small" onclick="roleassign()">{:L("ROLE_ALLOT")}</div>
+            <div class="layui-btn layui-btn-danger layui-btn-small" onclick="Delete()">{:L("DELETE")}</div>
+        </if>
+    </div>
+</block>
+<block name="nav">
+    {:L('ADMIN_RBAC_INDEX')}<b class="arrow fa fa-angle-right normal"></b>{:L('ADMIN_RBAC_ROLEEDIT')}
+</block>
+<block name="detail">
+    <input type="hidden" name="id" value="{$data.id}" />
+    <input type="hidden" name="genre" value="{$genre}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('ROLE_NAME')}</label>
+        <div class="layui-input-inline" >
+            <input type="text" class="layui-input" name="name" data-origin="{$data.name}" required lay-verify="required" placeholder="{:L('ROLE_INPUT_NAME')}" autocomplete="off" group="edit">
+
+            <label class="layui-form-label layui-form-label-view" group="view">{$data.name}</label>
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="color:red;" group="edit">*</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('ROLE_DESCRIPTION')}</label>
+        <div class="layui-input-inline" >
+            <textarea group="edit" name="remark" rows="2" cols="20" placeholder="{:L('ROLE_INPUT_DESCRIPTION')}" class="layui-textarea">{$data.remark}</textarea>
+            <label class="layui-form-label layui-form-label-view" group="view">{$data.remark}</label>                   
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('CHOOSE_TYPE')}</label>
+        <div class="layui-input-inline">
+           <!--  <select name="type" lay-filter="role" lay-verify="" id="type_select" disabled>
+                <if condition="$genre eq 0">
+                    <option value="0" name="type" >{:L('OPERATOR')}</option>
+                </if>
+                <if condition="$genre eq 1">
+                    <php>$system_select=$data['type']==1?"selected":"";</php>
+                    <php>$custom_select=$data['type']==2?"selected":"";</php>
+                    <option value="2" name="type" {$custom_select}>{:L('CUSTOM')}</option>
+                    <option value="1" name="type" {$system_select}>{:L('SYSTEM')}</option>
+                    
+                </if>
+                <if condition="$genre eq 2">
+                    <option value="2" name="type">{:L('VILLAGE')}</option>
+                </if>	
+            </select> -->	
+            
+                  <if condition="$genre eq 0">
+                     <label class="layui-form-label layui-form-label-view">{:L('OPERATOR')}</label>
+                 </if>
+                  <if condition="$genre eq 1">
+                       <php>
+                       if($data['type']==1){
+                            $select = "system";
+                         }else if($data['type']==2){
+                           $select = "custom";
+                           }
+                       </php>
+                       <if condition="$select eq 'custom'">
+                          <label class="layui-form-label layui-form-label-view" name="type">{:L('CUSTOM')}</label>
+                            <elseif condition="$select eq 'system'"/>
+                               <label class="layui-form-label layui-form-label-view" name="type">{:L('SYSTEM')}</label> 
+                          </if>
+                       </if>
+                       <if condition="$genre eq 2">
+                          <label class="layui-form-label layui-form-label-view" name="type">{:L('VILLAGE')}</label>
+                          </if>
+                       </if>
+
+        </div>
+    </div>
+    <if condition="$genre gt 0">
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属公司</label>
+            <div class="layui-input-inline"  group="edit">
+                <select lay-filter="abc" name="company_id" class="test-select" data-placeholder="请选择公司" >
+                    <option value=""></option>
+                    <volist name="companys" id="vo">
+                        <if condition="$vo['id'] eq $data['company_id']">
+                            <php>$selected = 'selected';</php>
+                            <else/>
+                            <php>$selected = '';</php>
+                        </if>
+                        <option value="{$vo.id}" {$selected}>{$vo.company_name}</option>
+                    </volist>
+                </select>
+
+            </div>
+            <div class="layui-input-inline"  group="view">
+                <label class="layui-form-label layui-form-label-view" group="view">{$data.company_name}</label>
+            </div>
+        </div>
+        <if condition="$genre eq 2">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属小区</label>
+                <div class="layui-input-inline"  group="edit">
+
+                    <div class="layui-input-inline" >
+                        <select id="xiaoquid" class="test-select" name="community_id" data-placeholder="请选择小区">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-input-inline"  group="view">
+                    <label class="layui-form-label layui-form-label-view" group="view">{$data.community_name}</label>
+                </div>
+            </div>
+        </if>
+    </if>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:L('STATUS')}</label>
+        <div class="layui-input-inline" group="edit">
+            <php>$active_true_checked=($data['status']==1)?"checked":"";</php>
+            <input type="radio" name="status" value="1" title="{:L('ROLE_OPEN')}" id="active_true" {$active_true_checked}/>
+            <php>$active_false_checked=($data['status']==0)?"checked":"";</php>
+            <input type="radio" name="status" value="0" title="{:L('ROLE_CLOSE')}" id="active_false"{$active_false_checked}>
+        </div>
+        <div class="layui-input-inline" group="view">
+            <php>$active_checked_status=($data['status']==1)?L('ROLE_OPEN1'):L('ROLE_CLOSE1');</php>
+            <label class="layui-form-label layui-form-label-view">{$active_checked_status}</label>
+        </div>
+    </div>
+</block>
+<block name="script"> 
+    <script>
+        $('[group="edit"]').hide();
+
+        function editDetail() {
+            $('[group="view"]').hide();
+            $('[group="edit"]').show();
+            initEdit();
+        }
+
+        function cancelDetail() {
+            $('[group="view"]').show();
+            $('[group="edit"]').hide();
+        }
+
+        layui.use('form', function () {
+            form = layui.form(); //获取form组件
+
+            //监听提交
+            form.on('submit(*)', function (data) {
+                postData({
+                    url: "{:U('roleedit_post',array('genre'=>$genre))}",
+                    params: data.field,
+                    success: function (result) {
+                        if (result.status == 1) {
+                            $('#tabList').bootstrapTable('refresh');
+                            showDetail(result.url);
+                            layer.msg(result.info, {
+                                time: 2000
+                            });
+                        } else {
+                            layer.alert(result.info);
+                        }
+                    }
+                });
+                return false;
+            });
+            form.on("select(abc)", function (data) {
+                //  console.log(data.elem); //得到select原始DOM对象
+                // console.log(data.value); //得到被选中的值
+                getXiaoqu(data.value);
+            });
+        });
+        function Delete() {
+            var DeleteUrl = "{:U('roledelete',array('id'=>$data['id']))}";
+            restoreDetail('确认要删除该记录吗？', DeleteUrl, 'tabList');
+        }
+        function authorize() {
+            showDetail("{:U('authorize',array('id'=>$data['id'],'genre'=>$genre))}");
+        }
+        function roleassign() {
+            showDetail("{:U('roledistribute',array('id'=>$data['id']))}");
+        }
+    </script>
+    <script>
+        function getXiaoqu(id) {
+            $.getJSON('{:U("Rbac/getCommunities")}', {
+                company_id: id
+            }, function (ci_objData) {
+                $('#xiaoquid').empty();
+                var objHtml = [];
+                objHtml.push('<option value=""></option>');
+                if (ci_objData.rows != undefined && ci_objData.rows.length > 0) {
+                    $.each(ci_objData.rows, function () {
+                        community_select = this.community_id == {$data.community_id} ? "selected" : "";
+                        objHtml.push('<option value="' + this.community_id + '" ' + community_select + '>' + this.name + '</option>');
+                    });
+                }
+                $(objHtml.join('')).appendTo('#xiaoquid');
+                form.render();
+            });
+        }
+        <if condition="$data['company_id'] gt 0">
+            var company_id = "{$data['company_id']}";
+            getXiaoqu(company_id);
+        </if>
+    </script>
+</block>
