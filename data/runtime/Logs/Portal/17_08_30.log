@@ -1,0 +1,125 @@
+[ 2017-08-30T14:21:35+08:00 ] ::1 /demo-master/public/js/jquery.min.map
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: Run Common\Behavior\InitHookBehavior [ RunTime:0.003000s ]
+INFO: Run Common\Behavior\ResqueHookBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.004000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.004000s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.003000s ]
+INFO: Run Common\Behavior\UrldecodeGetBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.007000s ]
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T14:22:04+08:00 ] ::1 /demo-master/public/js/jquery.min.map
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: Run Common\Behavior\InitHookBehavior [ RunTime:0.003000s ]
+INFO: Run Common\Behavior\ResqueHookBehavior [ RunTime:0.003000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.010001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.001001s ]
+INFO: Run Common\Behavior\UrldecodeGetBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003001s ]
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T14:29:52+08:00 ] ::1 /demo-master/public/js/jquery.min.map
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.001000s ]
+INFO: Run Common\Behavior\InitHookBehavior [ RunTime:0.002000s ]
+INFO: Run Common\Behavior\ResqueHookBehavior [ RunTime:0.003001s ]
+INFO: [ app_init ] --END-- [ RunTime:0.007001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002000s ]
+INFO: Run Common\Behavior\UrldecodeGetBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003000s ]
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T14:39:19+08:00 ] ::1 /demo-master/public/js/jquery.min.map
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: Run Common\Behavior\InitHookBehavior [ RunTime:0.004001s ]
+INFO: Run Common\Behavior\ResqueHookBehavior [ RunTime:0.001000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.006001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002000s ]
+INFO: Run Common\Behavior\UrldecodeGetBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004001s ]
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T15:08:14+08:00 ] ::1 /demo-master/public/js/jquery.min.map
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: Run Common\Behavior\InitHookBehavior [ RunTime:0.003001s ]
+INFO: Run Common\Behavior\ResqueHookBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.004001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.003000s ]
+INFO: Run Common\Behavior\UrldecodeGetBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.005000s ]
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T15:37:55+08:00 ] ::1 /demo-master/public/js/jquery.min.map
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.001000s ]
+INFO: Run Common\Behavior\InitHookBehavior [ RunTime:0.010001s ]
+INFO: Run Common\Behavior\ResqueHookBehavior [ RunTime:0.001000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.014001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002000s ]
+INFO: Run Common\Behavior\UrldecodeGetBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004001s ]
+ERR: 无法加载控制器:Public
+NOTIC: [2] include(): Filename cannot be empty C:\wamp\www\demo-master\simplewind\Core\Library\Think\Think.class.php 第 314 行.
+NOTIC: [2] include(): Failed opening '' for inclusion (include_path='.;C:\php\pear') C:\wamp\www\demo-master\simplewind\Core\Library\Think\Think.class.php 第 314 行.
+
+[ 2017-08-30T16:31:10+08:00 ] ::1 /demo-master/public/login
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T16:31:11+08:00 ] ::1 /demo-master/public/login
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T16:42:37+08:00 ] ::1 /demo-master/public/login
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T16:42:39+08:00 ] ::1 /demo-master/public/login
+ERR: 无法加载控制器:Public
+
+[ 2017-08-30T16:42:42+08:00 ] ::1 /demo-master/
+ERR: 无法加载控制器:CompanyIndex
+
+[ 2017-08-30T16:48:25+08:00 ] ::1 /demo-master/
+ERR: 无法加载控制器:CompanyIndex
+
+[ 2017-08-30T16:50:16+08:00 ] ::1 /demo-master/public/login
+ERR: 非法操作:public
+
+[ 2017-08-30T16:50:18+08:00 ] ::1 /demo-master/public/login
+ERR: 非法操作:public
+
+[ 2017-08-30T16:50:18+08:00 ] ::1 /demo-master/public/login
+ERR: 非法操作:public
+
+[ 2017-08-30T16:50:19+08:00 ] ::1 /demo-master/public/login
+ERR: 非法操作:public
+
+[ 2017-08-30T16:50:20+08:00 ] ::1 /demo-master/public/login
+ERR: 非法操作:public
+
+[ 2017-08-30T16:51:01+08:00 ] ::1 /demo-master/
+ERR: 无法加载控制器:CompanyIndex
+
+[ 2017-08-30T16:53:00+08:00 ] ::1 /demo-master/
+ERR: 无法加载控制器:CompanyIndex
+
+[ 2017-08-30T16:53:15+08:00 ] ::1 /demo-master/
+ERR: 无法加载控制器:CompanyIndex
+
+[ 2017-08-30T16:53:16+08:00 ] ::1 /demo-master/
+ERR: 无法加载控制器:CompanyIndex
+

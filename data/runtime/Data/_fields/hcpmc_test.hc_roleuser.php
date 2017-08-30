@@ -1,0 +1,1 @@
+a:5:{i:0;s:7:"role_id";i:1;s:7:"user_id";i:2;s:10:"company_id";i:3;s:12:"community_id";s:5:"_type";a:4:{s:7:"role_id";s:16:"int(11) unsigned";s:7:"user_id";s:10:"bigint(20)";s:10:"company_id";s:16:"int(10) unsigned";s:12:"community_id";s:16:"int(11) unsigned";}}
